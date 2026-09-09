@@ -15,6 +15,31 @@ export interface AuthState {
   setDisplayName: (name: string) => Promise<void>;
 }
 
+/**
+ * Consumes a magic-link / OAuth redirect that returns tokens in the URL hash.
+ * Works even when the token lands after our app's own route hash
+ * (e.g. `#/news#access_token=...`), then cleans the URL back to a real route.
+ */
+async function consumeAuthRedirect(): Promise<void> {
+  if (typeof window === 'undefined' || !supabase) return;
+  const hash = window.location.hash || '';
+  const tokenIdx = hash.indexOf('access_token=');
+  if (tokenIdx === -1) return;
+
+  const params = new URLSearchParams(hash.substring(tokenIdx));
+  const access_token = params.get('access_token');
+  const refresh_token = params.get('refresh_token');
+  if (access_token && refresh_token) {
+    await supabase.auth.setSession({ access_token, refresh_token });
+  }
+
+  // Preserve any app route that preceded the token; otherwise land on News.
+  const hashBeforeToken = hash.lastIndexOf('#', tokenIdx - 1);
+  let route = hashBeforeToken > 0 ? hash.substring(0, hashBeforeToken) : '';
+  if (!route || route === '#') route = '#/news';
+  window.location.hash = route;
+}
+
 export function useAuth(): AuthState {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState<boolean>(isSupabaseEnabled);
@@ -29,11 +54,13 @@ export function useAuth(): AuthState {
       return;
     }
     let active = true;
-    supabase.auth.getSession().then(({ data }) => {
+    (async () => {
+      await consumeAuthRedirect();
+      const { data } = await supabase!.auth.getSession();
       if (!active) return;
       setSession(data.session);
       setLoading(false);
-    });
+    })();
     const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
       setSession(next);
     });
@@ -73,7 +100,11 @@ export function useAuth(): AuthState {
     if (!supabase) throw new Error('Backend not configured.');
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.href },
+      // Redirect to the app root (no route hash) so the returned token doesn't
+      // collide with our hash router. consumeAuthRedirect() handles it on load.
+      options: {
+        emailRedirectTo: `${window.location.origin}${import.meta.env.BASE_URL}`,
+      },
     });
     if (error) throw error;
   }, []);

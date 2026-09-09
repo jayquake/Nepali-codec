@@ -17,7 +17,10 @@ export const supabase: SupabaseClient | null = isSupabaseEnabled
       auth: {
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: true,
+        // We consume the magic-link redirect ourselves (see useAuth), because this
+        // app uses hash-based routing and Supabase's own hash parser can't handle a
+        // token that lands after a second '#'.
+        detectSessionInUrl: false,
       },
     })
   : null;
