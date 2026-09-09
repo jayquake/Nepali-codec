@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Manaslu Trek">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1f17"/>
+      <stop offset="1" stop-color="#1b4332"/>
+    </linearGradient>
+    <linearGradient id="snow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#cfe8dd"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#sky)"/>
+  <circle cx="368" cy="150" r="46" fill="#f4c95d" opacity="0.9"/>
+  <!-- Back ridge -->
+  <path d="M40 392 L150 250 L214 322 L300 210 L372 300 L472 392 Z" fill="#2d6a4f"/>
+  <!-- Main Manaslu peak with snow cap -->
+  <path d="M120 400 L268 150 L416 400 Z" fill="#40916c"/>
+  <path d="M268 150 L214 242 L246 232 L268 268 L292 226 L322 244 Z" fill="url(#snow)"/>
+  <!-- Foreground snow line -->
+  <path d="M40 400 L472 400 L472 430 L40 430 Z" fill="url(#snow)" opacity="0.85"/>
+  <!-- Trail dots -->
+  <g fill="#f4c95d">
+    <circle cx="180" cy="380" r="9"/>
+    <circle cx="232" cy="356" r="9"/>
+    <circle cx="286" cy="372" r="9"/>
+    <circle cx="340" cy="352" r="9"/>
+  </g>
+</svg>
