@@ -103,7 +103,7 @@ export function App() {
         {view === 'trails' && <Trails progress={progress} onShowOnMap={focusOnMap} />}
         {view === 'conditions' && <Conditions />}
         {view === 'stay' && <Stay onShowOnMap={focusOnMap} />}
-        {view === 'news' && <News auth={auth} />}
+        {view === 'news' && <News />}
         {view === 'journal' && <Journal auth={auth} geo={geo} />}
         {view === 'tracks' && <Tracks tracks={tracks} onShowOnMap={focusOnMap} />}
       </main>

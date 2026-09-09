@@ -9,6 +9,8 @@ export interface NewsItem {
   category: string;
   summary: string;
   source?: string;
+  /** Link to the original article (present on auto-fetched items). */
+  link?: string;
 }
 
 export const NEWS_CATEGORIES = ['all', 'permits', 'weather', 'route', 'safety', 'general'];
