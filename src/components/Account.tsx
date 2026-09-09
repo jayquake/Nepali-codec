@@ -13,15 +13,31 @@ export function Account({
   onClose: () => void;
 }) {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   const [name, setName] = useState(auth.displayName ?? '');
+  const [useMagicLink, setUseMagicLink] = useState(false);
 
   const shareLink = auth.shareToken
     ? `${window.location.origin}${import.meta.env.BASE_URL}#/track/${auth.shareToken}`
     : '';
+
+  const passwordAuth = async (mode: 'in' | 'up') => {
+    setBusy(true);
+    setError(null);
+    try {
+      if (mode === 'in') await auth.signInWithPassword(email.trim(), password);
+      else await auth.signUpWithPassword(email.trim(), password);
+      // On success the auth listener updates state and this panel re-renders signed-in.
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Sign-in failed.');
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const sendLink = async () => {
     setBusy(true);
@@ -65,10 +81,66 @@ export function Account({
           </div>
         )}
 
-        {auth.enabled && !auth.user && (
+        {auth.enabled && !auth.user && !useMagicLink && (
           <>
             <p className="small muted" style={{ marginTop: 0 }}>
-              Sign in with a magic link — no password. We’ll email you a one-tap link.
+              Sign in to sync progress across devices, share your live location, post news and keep
+              a photo journal. You stay signed in on this device — no repeated logins.
+            </p>
+            <div className="field">
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                autoComplete="email"
+              />
+            </div>
+            <div className="field">
+              <label>Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least 6 characters"
+                autoComplete="current-password"
+              />
+            </div>
+            {error && <div className="banner banner--warn">{error}</div>}
+            <div className="row">
+              <button
+                className="btn btn--primary"
+                onClick={() => passwordAuth('in')}
+                disabled={busy || !email.includes('@') || password.length < 6}
+              >
+                {busy ? '…' : 'Sign in'}
+              </button>
+              <button
+                className="btn"
+                onClick={() => passwordAuth('up')}
+                disabled={busy || !email.includes('@') || password.length < 6}
+              >
+                Create account
+              </button>
+            </div>
+            <button
+              className="btn btn--ghost btn--sm"
+              style={{ marginTop: 10 }}
+              onClick={() => {
+                setError(null);
+                setUseMagicLink(true);
+              }}
+            >
+              Prefer a magic link instead?
+            </button>
+          </>
+        )}
+
+        {auth.enabled && !auth.user && useMagicLink && (
+          <>
+            <p className="small muted" style={{ marginTop: 0 }}>
+              We’ll email you a one-tap sign-in link (subject to a per-hour email limit).
             </p>
             {sent ? (
               <div className="banner banner--info">
@@ -92,6 +164,17 @@ export function Account({
                 </button>
               </>
             )}
+            <button
+              className="btn btn--ghost btn--sm"
+              style={{ marginTop: 10 }}
+              onClick={() => {
+                setError(null);
+                setSent(false);
+                setUseMagicLink(false);
+              }}
+            >
+              ← Back to password sign-in
+            </button>
           </>
         )}
 

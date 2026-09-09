@@ -10,6 +10,10 @@ export interface AuthState {
   displayName: string | null;
   /** Public token that powers the live-tracking share link. */
   shareToken: string | null;
+  /** Email + password (primary — no emails sent when confirmation is disabled). */
+  signInWithPassword: (email: string, password: string) => Promise<void>;
+  signUpWithPassword: (email: string, password: string) => Promise<void>;
+  /** Magic link (fallback — subject to Supabase's email rate limit). */
   signIn: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   setDisplayName: (name: string) => Promise<void>;
@@ -96,6 +100,18 @@ export function useAuth(): AuthState {
     };
   }, [user]);
 
+  const signInWithPassword = useCallback(async (email: string, password: string) => {
+    if (!supabase) throw new Error('Backend not configured.');
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+  }, []);
+
+  const signUpWithPassword = useCallback(async (email: string, password: string) => {
+    if (!supabase) throw new Error('Backend not configured.');
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) throw error;
+  }, []);
+
   const signIn = useCallback(async (email: string) => {
     if (!supabase) throw new Error('Backend not configured.');
     const { error } = await supabase.auth.signInWithOtp({
@@ -134,6 +150,8 @@ export function useAuth(): AuthState {
     user,
     displayName,
     shareToken,
+    signInWithPassword,
+    signUpWithPassword,
     signIn,
     signOut,
     setDisplayName,
