@@ -5,13 +5,15 @@ export type ViewName =
   | 'stay'
   | 'news'
   | 'journal'
-  | 'tracks';
+  | 'tracks'
+  | 'checklist';
 
 const ITEMS: { name: ViewName; icon: string; label: string }[] = [
   { name: 'map', icon: '🗺️', label: 'Map' },
   { name: 'trails', icon: '🥾', label: 'Trails' },
   { name: 'conditions', icon: '⛅', label: 'Weather' },
   { name: 'stay', icon: '🛏️', label: 'Stay' },
+  { name: 'checklist', icon: '✅', label: 'Prep' },
   { name: 'news', icon: '📰', label: 'News' },
   { name: 'journal', icon: '📷', label: 'Journal' },
   { name: 'tracks', icon: '📈', label: 'Tracks' },

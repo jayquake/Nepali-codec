@@ -13,6 +13,7 @@ import { Stay } from './components/Stay';
 import { News } from './components/News';
 import { Journal } from './components/Journal';
 import { Tracks } from './components/Tracks';
+import { Checklist } from './components/Checklist';
 import { Account } from './components/Account';
 import { Track } from './components/Track';
 import { TREK_NAME } from './data/trail';
@@ -106,6 +107,7 @@ export function App() {
         {view === 'news' && <News />}
         {view === 'journal' && <Journal auth={auth} geo={geo} />}
         {view === 'tracks' && <Tracks tracks={tracks} onShowOnMap={focusOnMap} />}
+        {view === 'checklist' && <Checklist />}
       </main>
 
       <Nav active={view} onNavigate={navigate} />

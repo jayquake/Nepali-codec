@@ -138,6 +138,7 @@ a {
 
 .nav__item {
   flex: 1;
+  min-width: 0;
   border: 0;
   background: none;
   color: var(--text-dim);
@@ -146,9 +147,10 @@ a {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  font-size: 10px;
+  font-size: 9px;
+  white-space: nowrap;
   cursor: pointer;
-  padding: 6px 2px;
+  padding: 6px 1px;
   transition: color 0.15s;
 }
 
@@ -157,8 +159,70 @@ a {
 }
 
 .nav__icon {
-  font-size: 19px;
+  font-size: 18px;
   line-height: 1;
+}
+
+/* ---------- Checklist ---------- */
+.progress {
+  height: 8px;
+  border-radius: 999px;
+  background: #0b1f17;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.progress__bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: width 0.25s ease;
+}
+
+.clitem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.clitem:last-child {
+  border-bottom: 0;
+}
+
+.clitem__main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.clitem__main input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  accent-color: var(--accent);
+}
+
+.clitem__label {
+  font-size: 14px;
+}
+
+.clitem__label--done {
+  color: var(--text-dim);
+  text-decoration: line-through;
+}
+
+.clitem__del {
+  flex: none;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 6px;
 }
 
 /* ---------- Reusable ---------- */
