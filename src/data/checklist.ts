@@ -73,6 +73,21 @@ export const defaultChecklist: ChecklistItem[] = [
   { id: 'wipes', label: 'Wet wipes / toilet paper', category: 'Extras' },
   { id: 'snacks', label: 'Snacks / energy bars', category: 'Extras' },
   { id: 'earplugs', label: 'Earplugs', category: 'Extras' },
+  { id: 'detergent', label: 'Detergent (laundry)', category: 'Extras' },
+
+  // Personal additions
+  { id: 'thicksocks', label: 'Thick socks', category: 'Clothing & layers' },
+  { id: 'cottonsocks', label: 'Cotton socks (x3)', category: 'Clothing & layers' },
+  { id: 'thermalpants', label: 'Thermal pants', category: 'Clothing & layers' },
+  { id: 'tightpants', label: 'Tight / base pants (x2)', category: 'Clothing & layers' },
+  { id: 'warmpants', label: 'Warm pants', category: 'Clothing & layers' },
+  { id: 'pajama', label: 'Pyjamas', category: 'Clothing & layers' },
+  { id: 'thermalshirt', label: 'Thermal shirt', category: 'Clothing & layers' },
+  { id: 'cottonshirt', label: 'Cotton shirt', category: 'Clothing & layers' },
+  { id: 'liner', label: 'Liner', category: 'Clothing & layers' },
+  { id: 'charcoal', label: 'Charcoal pills (stomach)', category: 'Health & safety' },
+  { id: 'antibiotics', label: 'Antibiotics (ask a doctor)', category: 'Health & safety' },
+  { id: 'lifestraw', label: 'LifeStraw / water filter', category: 'Gear & equipment' },
 ];
 
 // One-tap common extras people often forget.
