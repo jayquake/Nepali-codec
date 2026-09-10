@@ -12,7 +12,8 @@ export interface AuthState {
   shareToken: string | null;
   /** Email + password (primary — no emails sent when confirmation is disabled). */
   signInWithPassword: (email: string, password: string) => Promise<void>;
-  signUpWithPassword: (email: string, password: string) => Promise<void>;
+  /** Returns needsConfirmation=true when the project still requires email confirmation. */
+  signUpWithPassword: (email: string, password: string) => Promise<{ needsConfirmation: boolean }>;
   /** Magic link (fallback — subject to Supabase's email rate limit). */
   signIn: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -108,8 +109,10 @@ export function useAuth(): AuthState {
 
   const signUpWithPassword = useCallback(async (email: string, password: string) => {
     if (!supabase) throw new Error('Backend not configured.');
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
+    // When email confirmation is enabled, signUp returns a user but no session.
+    return { needsConfirmation: !data.session };
   }, []);
 
   const signIn = useCallback(async (email: string) => {

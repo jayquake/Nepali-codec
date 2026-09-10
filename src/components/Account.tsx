@@ -25,15 +25,42 @@ export function Account({
     ? `${window.location.origin}${import.meta.env.BASE_URL}#/track/${auth.shareToken}`
     : '';
 
+  const [info, setInfo] = useState<string | null>(null);
+
   const passwordAuth = async (mode: 'in' | 'up') => {
     setBusy(true);
     setError(null);
+    setInfo(null);
     try {
-      if (mode === 'in') await auth.signInWithPassword(email.trim(), password);
-      else await auth.signUpWithPassword(email.trim(), password);
-      // On success the auth listener updates state and this panel re-renders signed-in.
+      if (mode === 'in') {
+        await auth.signInWithPassword(email.trim(), password);
+      } else {
+        const { needsConfirmation } = await auth.signUpWithPassword(email.trim(), password);
+        if (needsConfirmation) {
+          setInfo(
+            'Account created, but this Supabase project still requires email confirmation, so ' +
+              'you are not signed in yet. Fix: in Supabase → Authentication → Sign In / Providers → ' +
+              'Email, turn OFF “Confirm email”, then tap Sign in with the same password.',
+          );
+        }
+        // Otherwise the auth listener signs you in and this panel re-renders.
+      }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Sign-in failed.');
+      const msg = e instanceof Error ? e.message : 'Sign-in failed.';
+      if (/already registered|already exists/i.test(msg)) {
+        setError(
+          'That email already has an account. Tap “Sign in” with your password. If you first used ' +
+            'a magic link (no password was set), delete the user in Supabase → Authentication → ' +
+            'Users, then create the account again here.',
+        );
+      } else if (/confirm/i.test(msg)) {
+        setError(
+          'Email not confirmed. In Supabase → Authentication → Sign In / Providers → Email, turn ' +
+            'OFF “Confirm email”, then try again.',
+        );
+      } else {
+        setError(msg);
+      }
     } finally {
       setBusy(false);
     }
@@ -108,6 +135,7 @@ export function Account({
               />
             </div>
             {error && <div className="banner banner--warn">{error}</div>}
+            {info && <div className="banner banner--info">{info}</div>}
             <div className="row">
               <button
                 className="btn btn--primary"
