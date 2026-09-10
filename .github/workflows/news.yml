@@ -1,0 +1,40 @@
+name: Fetch trek news
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-news
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch headlines
+        run: node scripts/fetch-news.mjs
+
+      - name: Commit if changed
+        run: |
+          if [ -n "$(git status --porcelain public/news.json)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add public/news.json
+            git commit -m "chore: update trek news feed [skip ci]"
+            git push
+          else
+            echo "No news changes to commit."
+          fi
