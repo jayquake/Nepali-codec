@@ -208,8 +208,9 @@ export function Account({
 
         {auth.user && (
           <>
-            <div className="small muted" style={{ marginBottom: 10 }}>
-              Signed in as {auth.user.email}
+            <div className="banner banner--info" style={{ marginTop: 0 }}>
+              ✓ Signed in as <b>{auth.user.email}</b>. Your progress, journal and tracks now sync to
+              this account. You’ll stay signed in on this device.
             </div>
 
             <div className="field">
@@ -253,9 +254,18 @@ export function Account({
               )}
             </div>
 
-            <button className="btn btn--ghost" style={{ marginTop: 12 }} onClick={() => void auth.signOut()}>
-              Sign out
-            </button>
+            <div className="row" style={{ marginTop: 12 }}>
+              <button className="btn btn--primary" onClick={onClose}>
+                Done
+              </button>
+              <button
+                className="btn btn--ghost"
+                style={{ marginLeft: 'auto' }}
+                onClick={() => void auth.signOut()}
+              >
+                Sign out
+              </button>
+            </div>
           </>
         )}
       </div>
