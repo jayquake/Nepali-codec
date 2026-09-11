@@ -38,6 +38,9 @@ export function App() {
 
   const [showAccount, setShowAccount] = useState(false);
   const [mapFocus, setMapFocus] = useState<MapFocus | null>(null);
+  const [mapHighlight, setMapHighlight] = useState<{ coords: [number, number][]; key: number } | null>(
+    null,
+  );
 
   // Turning on sharing implies we need the GPS running.
   useEffect(() => {
@@ -58,6 +61,11 @@ export function App() {
 
   const focusOnMap = (lat: number, lng: number) => {
     setMapFocus({ lat, lng, key: Date.now() });
+    navigate('map');
+  };
+
+  const viewRouteOnMap = (coords: [number, number][]) => {
+    setMapHighlight({ coords, key: Date.now() });
     navigate('map');
   };
 
@@ -99,9 +107,12 @@ export function App() {
             onToggleLocate={() => setLocating((l) => !l)}
             tracks={tracks}
             focus={mapFocus}
+            highlight={mapHighlight}
           />
         )}
-        {view === 'trails' && <Trails progress={progress} onShowOnMap={focusOnMap} />}
+        {view === 'trails' && (
+          <Trails progress={progress} onShowOnMap={focusOnMap} onViewRoute={viewRouteOnMap} />
+        )}
         {view === 'conditions' && <Conditions />}
         {view === 'stay' && <Stay onShowOnMap={focusOnMap} />}
         {view === 'news' && <News />}

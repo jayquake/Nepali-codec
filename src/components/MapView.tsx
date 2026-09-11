@@ -40,6 +40,16 @@ function FlyToFocus({ focus }: { focus: MapFocus | null }) {
   return null;
 }
 
+function FitHighlight({ highlight }: { highlight: MapHighlight | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (highlight && highlight.coords.length) {
+      map.fitBounds(highlight.coords, { padding: [50, 50], maxZoom: 13 });
+    }
+  }, [highlight, map]);
+  return null;
+}
+
 function CenterOnUser({ trigger, lat, lng }: { trigger: number; lat?: number; lng?: number }) {
   const map = useMap();
   useEffect(() => {
@@ -50,18 +60,25 @@ function CenterOnUser({ trigger, lat, lng }: { trigger: number; lat?: number; ln
   return null;
 }
 
+export interface MapHighlight {
+  coords: [number, number][];
+  key: number;
+}
+
 export function MapView({
   geo,
   locating,
   onToggleLocate,
   tracks,
   focus,
+  highlight,
 }: {
   geo: GeolocationState;
   locating: boolean;
   onToggleLocate: () => void;
   tracks: TracksState;
   focus: MapFocus | null;
+  highlight: MapHighlight | null;
 }) {
   const [showVillages, setShowVillages] = useState(true);
   const [showLodges, setShowLodges] = useState(true);
@@ -90,9 +107,37 @@ export function MapView({
         />
         <FitRoute />
         <FlyToFocus focus={focus} />
+        <FitHighlight highlight={highlight} />
         <CenterOnUser trigger={centerTrigger} lat={pos?.lat} lng={pos?.lng} />
 
         <Polyline positions={routeLine} pathOptions={{ color: '#f4c95d', weight: 4, opacity: 0.9 }} />
+
+        {highlight && highlight.coords.length > 0 && (
+          <>
+            <Polyline
+              positions={highlight.coords}
+              pathOptions={{ color: '#0b1f17', weight: 9, opacity: 0.55 }}
+            />
+            <Polyline
+              positions={highlight.coords}
+              pathOptions={{ color: '#e5654b', weight: 5, opacity: 1 }}
+            />
+            <CircleMarker
+              center={highlight.coords[0]}
+              radius={6}
+              pathOptions={{ color: '#0b1f17', weight: 2, fillColor: '#74c69d', fillOpacity: 1 }}
+            >
+              <Tooltip>Start</Tooltip>
+            </CircleMarker>
+            <CircleMarker
+              center={highlight.coords[highlight.coords.length - 1]}
+              radius={6}
+              pathOptions={{ color: '#0b1f17', weight: 2, fillColor: '#e5654b', fillOpacity: 1 }}
+            >
+              <Tooltip>End</Tooltip>
+            </CircleMarker>
+          </>
+        )}
 
         {showVillages &&
           allWaypoints.map((wp) => {

@@ -506,6 +506,22 @@ a {
   display: block;
 }
 
+.elev {
+  margin: 2px 0 4px;
+}
+
+.elev__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.elev__labels b {
+  color: var(--text);
+}
+
 /* ---------- Lodges ---------- */
 .lodge {
   border-bottom: 1px solid var(--border);

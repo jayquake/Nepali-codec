@@ -12,9 +12,11 @@ import {
 export function Trails({
   progress,
   onShowOnMap,
+  onViewRoute,
 }: {
   progress: ProgressState;
   onShowOnMap: (lat: number, lng: number) => void;
+  onViewRoute: (coords: [number, number][]) => void;
 }) {
   const distanceDone = stages
     .filter((s) => progress.isDone(s.id))
@@ -67,8 +69,10 @@ export function Trails({
 
       {stages.map((stage) => {
         const done = progress.isDone(stage.id);
+        const start = stage.waypoints[0];
         const dest = stage.waypoints[stage.waypoints.length - 1];
         const elevations = stage.waypoints.map((w) => w.ele);
+        const coords = stage.waypoints.map((w) => [w.lat, w.lng] as [number, number]);
         const isRest = stage.distanceKm === 0;
         return (
           <div key={stage.id} className={`stage${done ? ' stage--done' : ''}`}>
@@ -108,17 +112,32 @@ export function Trails({
               </span>
             </div>
 
-            {!isRest && <ElevationSparkline elevations={elevations} />}
+            {!isRest && (
+              <div className="elev">
+                <ElevationSparkline elevations={elevations} />
+                <div className="elev__labels">
+                  <span>
+                    start <b>{start.ele.toLocaleString()} m</b>
+                  </span>
+                  <span>
+                    end <b>{dest.ele.toLocaleString()} m</b>
+                  </span>
+                </div>
+              </div>
+            )}
 
             <p className="stage__desc">{stage.description}</p>
 
-            <button
-              className="btn btn--sm btn--ghost"
-              style={{ marginTop: 4 }}
-              onClick={() => onShowOnMap(dest.lat, dest.lng)}
-            >
-              🗺️ Show {stage.to} on map
-            </button>
+            <div className="row" style={{ marginTop: 4, flexWrap: 'wrap' }}>
+              {!isRest && (
+                <button className="btn btn--sm btn--primary" onClick={() => onViewRoute(coords)}>
+                  🧭 View route
+                </button>
+              )}
+              <button className="btn btn--sm btn--ghost" onClick={() => onShowOnMap(dest.lat, dest.lng)}>
+                📍 {stage.to}
+              </button>
+            </div>
           </div>
         );
       })}
