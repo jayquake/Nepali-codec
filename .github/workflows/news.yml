@@ -33,7 +33,9 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add public/news.json
-            git commit -m "chore: update trek news feed [skip ci]"
+            # NOTE: no [skip ci] — this push must trigger the Pages deploy so the
+            # refreshed news.json actually reaches the live site.
+            git commit -m "chore: update trek news feed"
             git push
           else
             echo "No news changes to commit."
