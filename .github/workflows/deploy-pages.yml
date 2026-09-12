@@ -5,6 +5,9 @@ on:
     branches:
       - main
       - claude/mansalau-hike-webapp-gcgk63
+  # Rebuild + redeploy every 6h so fresh trek news reaches the live site.
+  schedule:
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 # Allow the workflow to publish to GitHub Pages.
@@ -33,6 +36,12 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Fetch latest trek news
+        # Generates public/news.json so the build bundles current headlines.
+        # Non-fatal: if the fetch fails, the committed news.json is used instead.
+        continue-on-error: true
+        run: node scripts/fetch-news.mjs
 
       - name: Build
         # Supabase config comes from repo Variables (Settings -> Secrets and
