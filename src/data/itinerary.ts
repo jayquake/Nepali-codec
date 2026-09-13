@@ -133,8 +133,16 @@ export const itinerary: ItineraryDay[] = [
     id: 'd-buffer',
     date: '2026-09-30',
     icon: '🏙️',
-    title: 'Kathmandu — buffer / departure window',
-    detail: '30 Sep–3 Oct kept open: contingency, rest, souvenirs. Set your return flight here.',
+    title: 'Kathmandu — buffer / rest',
+    detail: '30 Sep–2 Oct: contingency + celebration. Rest, souvenirs, repack. A nicer hotel post-trek.',
     kind: 'city',
+  },
+  {
+    id: 'd-fly-home',
+    date: '2026-10-03',
+    icon: '✈️',
+    title: 'Fly home',
+    detail: 'Departure from Kathmandu. Reconfirm the flight and airport transfer the day before.',
+    kind: 'fly',
   },
 ];
