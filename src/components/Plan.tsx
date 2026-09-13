@@ -1,5 +1,6 @@
 import { useItinerary } from '../hooks/useItinerary';
 import { itinerary } from '../data/itinerary';
+import { afterTrek, afterTrekIntro, placeMapsUrl } from '../data/afterTrek';
 import {
   agencyAreas,
   agencyIntro,
@@ -64,6 +65,34 @@ export function Plan() {
           </div>
         );
       })}
+
+      {/* ---------- After the trek ---------- */}
+      <div className="section-title">After the trek · wind-down ideas</div>
+      <div className="banner banner--info">{afterTrekIntro}</div>
+      {afterTrek.map((idea) => (
+        <div key={idea.name} className="card" style={{ padding: '12px 14px' }}>
+          <div className="spread">
+            <div className="lodge__name">{idea.name}</div>
+            <a
+              className="badge"
+              href={placeMapsUrl(idea.mapsQuery)}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              🗺️ Map
+            </a>
+          </div>
+          <div className="small muted" style={{ margin: '2px 0 6px' }}>
+            {idea.tag}
+          </div>
+          <div className="stage__desc">{idea.what}</div>
+          {idea.stay && (
+            <div className="small muted" style={{ marginTop: 6 }}>
+              🛏️ {idea.stay}
+            </div>
+          )}
+        </div>
+      ))}
 
       {/* ---------- Kathmandu briefing ---------- */}
       <div className="section-title">Kathmandu · arrival &amp; base</div>
