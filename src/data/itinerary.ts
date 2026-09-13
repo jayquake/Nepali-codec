@@ -19,7 +19,7 @@ export const itinerary: ItineraryDay[] = [
     icon: '✈️',
     title: 'Fly to Kathmandu (via Dubai)',
     detail:
-      'FZ573 flydubai DXB → KTM. Lands ~00:55 (Thu, KTM time). Hotel booked for the night of the 16th; arrival ~02:00.',
+      'FZ573 flydubai DXB → KTM. Lands ~00:55 (Thu, KTM time). 🛏️ Vastu Boutique Hotel (Jyatha, Thamel) booked for the night of the 16th; arrival ~02:00.',
     kind: 'fly',
   },
   {
@@ -28,7 +28,7 @@ export const itinerary: ItineraryDay[] = [
     icon: '🏙️',
     title: 'Kathmandu — finalise & shop',
     detail:
-      'Close out the trip arrangements with the agency, confirm permits (RAP + MCAP + ACAP), and shop for the hike in Thamel.',
+      'Close out the trip arrangements with the agency, confirm permits (RAP + MCAP + ACAP), and shop for the hike in Thamel. 🛏️ Vastu Boutique Hotel.',
     kind: 'city',
   },
   {

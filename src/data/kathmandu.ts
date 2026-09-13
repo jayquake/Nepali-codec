@@ -54,9 +54,17 @@ export interface KtmHotel {
   reviews?: string;
   notes: string;
   best?: boolean;
+  booked?: boolean;
 }
 
 export const ktmHotels: KtmHotel[] = [
+  {
+    name: 'Vastu Boutique Hotel',
+    area: 'Chhusya Galli, Jyatha (Thamel) · quiet cul-de-sac, 2 min to Thamel · 9.6/10',
+    notes:
+      'Our booking. Right by the agencies on Jyatha. Rooftop terrace + lift, free breakfast, AC rooms with rainfall showers, wifi, luggage storage, on-site ATM & restaurant.',
+    booked: true,
+  },
   {
     name: 'Arushi Boutique Hotel',
     area: 'Kunphen Marg, Chhetrapati',

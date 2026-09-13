@@ -183,7 +183,13 @@ export function Plan() {
                 <div className="spread">
                   <div style={{ minWidth: 0 }}>
                     <div className="lodge__name">
-                      {h.name} {h.best && <span className="badge">Top pick</span>}
+                      {h.name}{' '}
+                      {h.booked && (
+                        <span className="badge" style={{ background: '#1e3a2c', color: 'var(--accent-strong)' }}>
+                          ✓ Booked
+                        </span>
+                      )}
+                      {h.best && <span className="badge">Top pick</span>}
                     </div>
                     <div className="small muted">
                       {h.area}
