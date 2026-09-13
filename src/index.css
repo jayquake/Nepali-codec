@@ -169,6 +169,38 @@ a {
   line-height: 1;
 }
 
+/* ---------- Segmented control ---------- */
+.seg-row {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.seg {
+  flex: 1;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 12.5px;
+  padding: 8px 4px;
+  border-radius: 9px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.seg--active {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
 /* ---------- Itinerary / Plan ---------- */
 .itin {
   display: flex;
