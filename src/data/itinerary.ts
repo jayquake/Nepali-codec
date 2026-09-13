@@ -1,10 +1,7 @@
-// Day-by-day trip plan with real dates. Pre-trek + post-trek days are fixed here;
-// trek days are derived from the stages in trail.ts so they stay in sync.
-// Edit the anchors below as the plan firms up.
+// Day-by-day trip plan with the ACTUAL dates for this trip (Sep–Oct 2026).
+// Source: the group's dated schedule. Edit here if plans change.
 
-import { stages } from './trail';
-
-export type DayKind = 'fly' | 'city' | 'travel' | 'trek' | 'rest';
+export type DayKind = 'fly' | 'city' | 'travel' | 'trek' | 'rest' | 'pass';
 
 export interface ItineraryDay {
   id: string;
@@ -15,89 +12,129 @@ export interface ItineraryDay {
   kind: DayKind;
 }
 
-/** First trekking day (drive-in is the day before). */
-const TREK_START = '2026-09-20';
-
-function addDays(iso: string, n: number): string {
-  const d = new Date(iso + 'T00:00:00');
-  d.setDate(d.getDate() + n);
-  return d.toISOString().slice(0, 10);
-}
-
-const preTrek: ItineraryDay[] = [
+export const itinerary: ItineraryDay[] = [
   {
     id: 'd-fly-out',
     date: '2026-09-16',
     icon: '✈️',
-    title: 'Fly to Kathmandu',
-    detail: 'FZ573 flydubai DXB → KTM. Lands ~00:55 (Thu). Hotel booked for the night of the 16th; arrival ~02:00.',
+    title: 'Fly to Kathmandu (via Dubai)',
+    detail:
+      'FZ573 flydubai DXB → KTM. Lands ~00:55 (Thu, KTM time). Hotel booked for the night of the 16th; arrival ~02:00.',
     kind: 'fly',
   },
   {
-    id: 'd-ktm-1',
+    id: 'd-ktm',
     date: '2026-09-17',
     icon: '🏙️',
-    title: 'Kathmandu — organise',
-    detail: 'Meet the agency, start permits (RAP + MCAP + ACAP), sort gear in Thamel. Verify TAAN membership.',
+    title: 'Kathmandu — finalise & shop',
+    detail:
+      'Close out the trip arrangements with the agency, confirm permits (RAP + MCAP + ACAP), and shop for the hike in Thamel.',
     kind: 'city',
   },
   {
-    id: 'd-ktm-2',
+    id: 'd-drive-in',
     date: '2026-09-18',
-    icon: '🏙️',
-    title: 'Kathmandu — permits / buffer',
-    detail: 'Permits take 2–3 working days; Immigration is closed at weekends, so keep this as buffer. Confirm trail conditions.',
-    kind: 'city',
-  },
-  {
-    id: 'd-travel-in',
-    date: '2026-09-19',
     icon: '🚙',
-    title: 'Travel to trailhead',
-    detail: 'Long jeep day: Kathmandu → Machha Khola / Soti Khola. Early start.',
+    title: 'Kathmandu → Machha Khola',
+    detail: 'Long jeep day to the trailhead at Machha Khola (~900 m).',
     kind: 'travel',
   },
-];
-
-const trekDays: ItineraryDay[] = stages.map((s, i) => ({
-  id: `d-${s.id}`,
-  date: addDays(TREK_START, i),
-  icon: s.distanceKm === 0 ? '🧗' : '🥾',
-  title: `D${s.day} · ${s.from} → ${s.to}`,
-  detail:
-    s.distanceKm === 0
-      ? `Acclimatisation. ${s.hours}.`
-      : `${s.distanceKm} km · ↑${s.ascentM} / ↓${s.descentM} m · ${s.hours}.`,
-  kind: s.distanceKm === 0 ? 'rest' : 'trek',
-}));
-
-const lastTrek = addDays(TREK_START, stages.length - 1);
-
-const postTrek: ItineraryDay[] = [
+  {
+    id: 'd-t1',
+    date: '2026-09-19',
+    icon: '🥾',
+    title: 'Machha Khola → Jagat',
+    detail: 'Up the Budhi Gandaki past Tatopani hot springs to Jagat (~1,340 m). Permit check.',
+    kind: 'trek',
+  },
+  {
+    id: 'd-t2',
+    date: '2026-09-20',
+    icon: '🥾',
+    title: 'Jagat → Deng',
+    detail: 'Through Philim/Ekle Bhatti (Tsum Valley junction) into the gorge to Deng (~1,860 m).',
+    kind: 'trek',
+  },
+  {
+    id: 'd-t3',
+    date: '2026-09-21',
+    icon: '🥾',
+    title: 'Deng → Namrung',
+    detail: 'Cross to Buddhist country via Ghap; climb to Namrung (~2,630 m). Permit check.',
+    kind: 'trek',
+  },
+  {
+    id: 'd-t4',
+    date: '2026-09-22',
+    icon: '🥾',
+    title: 'Namrung → Lho',
+    detail: 'Through Lihi & Sho to Lho (~3,180 m) — first big Manaslu views, Ribung Gompa.',
+    kind: 'trek',
+  },
+  {
+    id: 'd-t5',
+    date: '2026-09-23',
+    icon: '🥾',
+    title: 'Lho → Sama Gaun',
+    detail: 'Through Shyala to Sama Gaun / Samagaon (~3,530 m), the acclimatisation hub.',
+    kind: 'trek',
+  },
+  {
+    id: 'd-accl',
+    date: '2026-09-24',
+    icon: '🧗',
+    title: 'Acclimatisation — Sama Gaun',
+    detail:
+      'Rest & acclimatise. Day hike to Manaslu Base Camp (~4,800 m) or Birendra Lake / Pungyen Gompa. Climb high, sleep low.',
+    kind: 'rest',
+  },
+  {
+    id: 'd-t6',
+    date: '2026-09-25',
+    icon: '🥾',
+    title: 'Sama Gaun → Samdo',
+    detail: 'Gentle high-valley walk to Samdo (~3,860 m), the last permanent village.',
+    kind: 'trek',
+  },
+  {
+    id: 'd-t7',
+    date: '2026-09-26',
+    icon: '🥾',
+    title: 'Samdo → Dharamsala',
+    detail: 'Short climb to Dharamsala / Larke Phedi (~4,460 m). Rest early for the pass.',
+    kind: 'trek',
+  },
+  {
+    id: 'd-pass',
+    date: '2026-09-27',
+    icon: '🏔️',
+    title: 'Dharamsala → Larkya La → Bhimthang',
+    detail:
+      'THE BIG DAY. Pre-dawn start over Larkya La (5,106 m), then a long descent to Bhimthang (~3,720 m). 8–10 h.',
+    kind: 'pass',
+  },
+  {
+    id: 'd-t8',
+    date: '2026-09-28',
+    icon: '🥾',
+    title: 'Bhimthang → Dharapani',
+    detail: 'Long descent through forest via Karche/Gho/Tilije to Dharapani (~1,860 m), joining the Annapurna Circuit.',
+    kind: 'trek',
+  },
   {
     id: 'd-drive-out',
-    date: addDays(lastTrek, 1),
+    date: '2026-09-29',
     icon: '🚙',
-    title: 'Drive out to Kathmandu',
-    detail: 'Jeep Dharapani → Besisahar, then on to Kathmandu (or overnight Besisahar/Pokhara).',
+    title: 'Dharapani → Kathmandu',
+    detail: 'Jeep out via Besisahar back to Kathmandu.',
     kind: 'travel',
   },
   {
-    id: 'd-ktm-buffer',
-    date: addDays(lastTrek, 2),
+    id: 'd-buffer',
+    date: '2026-09-30',
     icon: '🏙️',
-    title: 'Kathmandu — rest / buffer',
-    detail: 'Contingency + celebration. Consider a nicer hotel post-trek. Souvenirs, repack.',
+    title: 'Kathmandu — buffer / departure window',
+    detail: '30 Sep–3 Oct kept open: contingency, rest, souvenirs. Set your return flight here.',
     kind: 'city',
   },
-  {
-    id: 'd-fly-home',
-    date: addDays(lastTrek, 3),
-    icon: '✈️',
-    title: 'Fly home',
-    detail: 'Departure (~19:00 per notes). Adjust this date to your actual return flight.',
-    kind: 'fly',
-  },
 ];
-
-export const itinerary: ItineraryDay[] = [...preTrek, ...trekDays, ...postTrek];
