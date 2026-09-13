@@ -1,6 +1,12 @@
 import { useItinerary } from '../hooks/useItinerary';
 import { itinerary } from '../data/itinerary';
-import { afterTrek, afterTrekIntro, placeMapsUrl } from '../data/afterTrek';
+import {
+  afterTrek,
+  afterTrekIntro,
+  luxuryIntro,
+  luxuryStays,
+  placeMapsUrl,
+} from '../data/afterTrek';
 import {
   agencyAreas,
   agencyIntro,
@@ -91,6 +97,29 @@ export function Plan() {
               🛏️ {idea.stay}
             </div>
           )}
+        </div>
+      ))}
+
+      {/* ---------- Treat yourself ---------- */}
+      <div className="section-title">Treat yourself · pool &amp; spa</div>
+      <div className="banner banner--info">{luxuryIntro}</div>
+      {luxuryStays.map((h) => (
+        <div key={h.name} className="card" style={{ padding: '12px 14px' }}>
+          <div className="spread">
+            <div className="lodge__name">{h.name}</div>
+            <a
+              className="badge"
+              href={placeMapsUrl(h.mapsQuery)}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              🗺️ Map
+            </a>
+          </div>
+          <div className="small muted" style={{ margin: '2px 0 4px' }}>
+            {h.location} · {h.tag}
+          </div>
+          <div className="stage__desc">{h.what}</div>
         </div>
       ))}
 

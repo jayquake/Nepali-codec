@@ -53,6 +53,55 @@ export const afterTrek: AfterIdea[] = [
   },
 ];
 
+export interface LuxuryStay {
+  name: string;
+  location: string;
+  tag: string;
+  what: string;
+  mapsQuery: string;
+}
+
+export const luxuryIntro =
+  'Reward for the Larkya La: comfortable 5-star stays with a pool & spa to unwind. Book ahead in peak season.';
+
+export const luxuryStays: LuxuryStay[] = [
+  {
+    name: 'Hyatt Regency Kathmandu',
+    location: 'Kathmandu · near Boudhanath',
+    tag: '5-star · large outdoor pool · spa',
+    what: 'Resort-style grounds with a big pool and spa, a short drive from the airport — the easiest, most comfortable post-trek reward in the city.',
+    mapsQuery: 'Hyatt Regency Kathmandu',
+  },
+  {
+    name: 'Dwarika’s Hotel',
+    location: 'Kathmandu',
+    tag: 'Heritage luxury · courtyard pool · spa',
+    what: 'Nepal’s most iconic heritage hotel — salvaged Newari woodwork, a beautiful pool and the Fusion spa (Michelin Key). The signature splurge.',
+    mapsQuery: "Dwarika's Hotel Kathmandu",
+  },
+  {
+    name: 'Dwarika’s Resort Dhulikhel',
+    location: 'Dhulikhel · ~1 h from Kathmandu',
+    tag: 'Wellness resort · pool · Himalayan sunrise',
+    what: 'A hillside wellness retreat with pool, spa and sunrise mountain views — the most relaxing decompress if you want out of the city.',
+    mapsQuery: "Dwarika's Resort Dhulikhel",
+  },
+  {
+    name: 'Temple Tree Resort & Spa',
+    location: 'Pokhara · Lakeside',
+    tag: 'Pool & spa · lakeside · comfortable',
+    what: 'Relaxed lakeside resort with a lovely pool and spa in the heart of Pokhara Lakeside — great-value comfort by Phewa Lake.',
+    mapsQuery: 'Temple Tree Resort and Spa Pokhara',
+  },
+  {
+    name: 'Tiger Mountain Pokhara Lodge',
+    location: 'Above Pokhara',
+    tag: 'Hilltop · infinity pool · Annapurna views',
+    what: 'Award-winning ridge lodge with an infinity pool and panoramic Annapurna views — the premier Pokhara splurge, away from the crowds.',
+    mapsQuery: 'Tiger Mountain Pokhara Lodge',
+  },
+];
+
 export function placeMapsUrl(query: string): string {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
 }
