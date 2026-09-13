@@ -201,6 +201,21 @@ export function Plan() {
                   </a>
                 </div>
                 <div className="lodge__notes">{h.notes}</div>
+                {(h.address || h.website || h.phone || h.email) && (
+                  <div
+                    className="small muted"
+                    style={{ marginTop: 6, display: 'flex', gap: 12, flexWrap: 'wrap' }}
+                  >
+                    {h.address && <span>📍 {h.address}</span>}
+                    {h.phone && <a href={`tel:${h.phone.replace(/\s/g, '')}`}>📞 Call</a>}
+                    {h.email && <a href={`mailto:${h.email}`}>✉️ Email</a>}
+                    {h.website && (
+                      <a href={h.website} target="_blank" rel="noreferrer noopener">
+                        🔗 Website
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>

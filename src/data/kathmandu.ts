@@ -55,6 +55,10 @@ export interface KtmHotel {
   notes: string;
   best?: boolean;
   booked?: boolean;
+  address?: string;
+  website?: string;
+  phone?: string; // e.g. '+977-1-xxxxxxx'
+  email?: string;
 }
 
 export const ktmHotels: KtmHotel[] = [
@@ -64,6 +68,9 @@ export const ktmHotels: KtmHotel[] = [
     notes:
       'Our booking. Right by the agencies on Jyatha. Rooftop terrace + lift, free breakfast, AC rooms with rainfall showers, wifi, luggage storage, on-site ATM & restaurant.',
     booked: true,
+    address: 'Chhusya Galli, Jyatha-27, Thamel, 44600 Kathmandu',
+    website: 'https://www.vastuhotel.com/',
+    // phone/email: add once confirmed (their site was down when I checked).
   },
   {
     name: 'Arushi Boutique Hotel',
