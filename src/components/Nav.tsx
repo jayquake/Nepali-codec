@@ -1,6 +1,7 @@
 export type ViewName =
   | 'map'
   | 'trails'
+  | 'plan'
   | 'conditions'
   | 'stay'
   | 'news'
@@ -11,6 +12,7 @@ export type ViewName =
 const ITEMS: { name: ViewName; icon: string; label: string }[] = [
   { name: 'map', icon: '🗺️', label: 'Map' },
   { name: 'trails', icon: '🥾', label: 'Trails' },
+  { name: 'plan', icon: '📅', label: 'Plan' },
   { name: 'conditions', icon: '⛅', label: 'Weather' },
   { name: 'stay', icon: '🛏️', label: 'Stay' },
   { name: 'checklist', icon: '✅', label: 'Prep' },
