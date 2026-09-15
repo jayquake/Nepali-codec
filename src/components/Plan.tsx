@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useItinerary } from '../hooks/useItinerary';
 import { useBudget, budgetTotalUsd } from '../hooks/useBudget';
+import { useFxRate } from '../hooks/useFxRate';
 import { budgetItems, GROUP_LABELS, type BudgetGroup } from '../data/budget';
 import { itinerary } from '../data/itinerary';
 import {
@@ -36,7 +37,13 @@ function fmtDate(iso: string): string {
 export function Plan() {
   const it = useItinerary();
   const budget = useBudget();
+  const fx = useFxRate();
   const [section, setSection] = useState<Section>('itinerary');
+
+  // Auto-apply the live USD→NPR rate unless the user has set one manually.
+  useEffect(() => {
+    if (fx.rate) budget.useLiveRate(Math.round(fx.rate * 100) / 100);
+  }, [fx.rate, budget]);
   const doneCount = itinerary.filter((d) => it.done[d.id]).length;
   const totalUsd = budgetTotalUsd(budget.amount);
   const trailUsd = budgetItems
@@ -296,6 +303,29 @@ export function Plan() {
                   onChange={(e) => budget.setPeople(parseInt(e.target.value, 10))}
                 />
               </label>
+            </div>
+            <div className="small muted" style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+              {fx.rate ? (
+                <>
+                  <span>
+                    📡 Live ₨{fx.rate.toFixed(2)}/US$
+                    {fx.updatedAt ? ` · ${new Date(fx.updatedAt).toLocaleDateString()}` : ''}
+                    {budget.rateManual ? ' · using your manual rate' : ' · applied'}
+                  </span>
+                  {budget.rateManual && (
+                    <button className="btn btn--sm btn--ghost" onClick={budget.clearRateOverride}>
+                      Use live
+                    </button>
+                  )}
+                  <button className="btn btn--sm btn--ghost" onClick={fx.reload} disabled={fx.loading}>
+                    {fx.loading ? '…' : '↻'}
+                  </button>
+                </>
+              ) : fx.loading ? (
+                <span>📡 Fetching live rate…</span>
+              ) : (
+                <span>Live rate unavailable — using your rate. Cached when online.</span>
+              )}
             </div>
           </div>
 

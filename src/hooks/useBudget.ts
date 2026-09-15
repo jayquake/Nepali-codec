@@ -8,14 +8,18 @@ const CFG_KEY = 'manaslu.budget.cfg.v1';
 interface Cfg {
   rate: number;
   people: number;
+  rateManual?: boolean;
 }
 
 export interface BudgetState {
   rate: number;
   people: number;
+  rateManual: boolean;
   amount: (id: string, fallback: number) => number;
   setAmount: (id: string, usd: number) => void;
   setRate: (rate: number) => void;
+  useLiveRate: (rate: number) => void;
+  clearRateOverride: () => void;
   setPeople: (n: number) => void;
   reset: () => void;
 }
@@ -46,10 +50,24 @@ export function useBudget(): BudgetState {
     [amounts],
   );
 
+  // A user edit marks the rate as manual so the live rate stops overriding it.
   const setRate = useCallback(
-    (rate: number) => persistCfg({ ...cfg, rate: rate > 0 ? rate : DEFAULT_RATE }),
+    (rate: number) => persistCfg({ ...cfg, rate: rate > 0 ? rate : DEFAULT_RATE, rateManual: true }),
     [cfg],
   );
+
+  // Apply a fetched live rate without marking it manual (skips if user overrode).
+  const useLiveRate = useCallback(
+    (rate: number) => {
+      if (cfg.rateManual || !(rate > 0)) return;
+      if (Math.abs(rate - cfg.rate) < 0.005) return;
+      persistCfg({ ...cfg, rate });
+    },
+    [cfg],
+  );
+  // Drop the manual flag so the live rate applies again on the next render.
+  const clearRateOverride = useCallback(() => persistCfg({ ...cfg, rateManual: false }), [cfg]);
+
   const setPeople = useCallback(
     (people: number) => persistCfg({ ...cfg, people: Math.max(1, Math.round(people) || 1) }),
     [cfg],
@@ -57,15 +75,18 @@ export function useBudget(): BudgetState {
 
   const reset = useCallback(() => {
     persistAmounts({});
-    persistCfg({ rate: DEFAULT_RATE, people: 1 });
+    persistCfg({ rate: DEFAULT_RATE, people: 1, rateManual: false });
   }, []);
 
   return {
     rate: cfg.rate,
     people: cfg.people,
+    rateManual: Boolean(cfg.rateManual),
     amount,
     setAmount,
     setRate,
+    useLiveRate,
+    clearRateOverride,
     setPeople,
     reset,
   };

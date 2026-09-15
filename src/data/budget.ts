@@ -13,8 +13,8 @@ export interface BudgetItem {
   group: BudgetGroup;
 }
 
-/** NPR per 1 USD (2026 ballpark). Editable in-app. */
-export const DEFAULT_RATE = 133;
+/** NPR per 1 USD fallback (used before the live rate loads / when offline). Editable in-app. */
+export const DEFAULT_RATE = 150;
 
 export const GROUP_LABELS: Record<BudgetGroup, string> = {
   trail: 'On the trail · carry as NPR',

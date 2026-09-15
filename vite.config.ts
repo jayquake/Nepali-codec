@@ -59,6 +59,17 @@ export default defineConfig({
               cacheableResponse: { statuses: [0, 200] },
             },
           },
+          {
+            // Live USD→NPR exchange rate — fresh when online, last-known offline.
+            urlPattern: ({ url }) => url.host.endsWith('open.er-api.com'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'fx-rate',
+              networkTimeoutSeconds: 6,
+              expiration: { maxEntries: 4, maxAgeSeconds: 60 * 60 * 24 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
         ],
       },
       devOptions: { enabled: false },
