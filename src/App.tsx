@@ -33,7 +33,7 @@ export function App() {
   const [locating, setLocating] = useState(false);
   const [sharing, setSharing] = useState(false);
   const geo = useGeolocation(locating || sharing);
-  useLiveLocation(auth.user, sharing, geo.position);
+  const live = useLiveLocation(auth.user, sharing, geo.position);
   const progress = useProgress(auth.user);
   const tracks = useTracks(auth.user);
 
@@ -97,6 +97,8 @@ export function App() {
           sharing={sharing}
           onToggleSharing={setSharing}
           onClose={() => setShowAccount(false)}
+          geo={geo}
+          live={live}
         />
       )}
 

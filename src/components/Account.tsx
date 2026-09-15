@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import type { AuthState } from '../hooks/useAuth';
+import type { GeolocationState } from '../hooks/useGeolocation';
+import type { LiveStatus } from '../hooks/useLiveLocation';
 
 export function Account({
   auth,
   sharing,
   onToggleSharing,
   onClose,
+  geo,
+  live,
 }: {
   auth: AuthState;
   sharing: boolean;
   onToggleSharing: (v: boolean) => void;
   onClose: () => void;
+  geo: GeolocationState;
+  live: LiveStatus;
 }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -238,8 +244,28 @@ export function Account({
               </label>
               <div className="small muted" style={{ marginTop: 6 }}>
                 While on, your GPS position is posted every ~15 s so friends and family can follow
-                along with the link below. Turn it off any time.
+                along with the link below. Your phone only shares while this app is open on-screen —
+                browsers can’t track location in the background.
               </div>
+
+              {sharing && (
+                <div className="small" style={{ marginTop: 8 }}>
+                  {geo.error ? (
+                    <span style={{ color: 'var(--warn)' }}>⚠️ {geo.error}</span>
+                  ) : !geo.position ? (
+                    <span className="muted">📡 Waiting for a GPS fix… keep the app open &amp; allow location.</span>
+                  ) : live.error ? (
+                    <span style={{ color: 'var(--warn)' }}>⚠️ Couldn’t send: {live.error}</span>
+                  ) : live.lastSentAt ? (
+                    <span style={{ color: 'var(--accent-strong)' }}>
+                      📡 Live — last sent {new Date(live.lastSentAt).toLocaleTimeString()} (±
+                      {Math.round(geo.position.accuracy)} m)
+                    </span>
+                  ) : (
+                    <span className="muted">📡 Got GPS — sending your first update…</span>
+                  )}
+                </div>
+              )}
 
               {sharing && shareLink && (
                 <>

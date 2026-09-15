@@ -32,9 +32,10 @@ export function Track({ token }: { token: string }) {
           🥾 Following {name} · Manaslu Circuit
         </div>
         <div className="small muted">
-          {loading && !point && 'Locating…'}
-          {error && !point && error}
-          {updated && `Last update ${updated}`}
+          {loading && !point && 'Connecting…'}
+          {!loading && !point && !error && 'Waiting for the hiker to start sharing…'}
+          {!loading && !point && error && error}
+          {point && updated && `Last update ${updated}`}
           {point?.elevation != null && ` · ${Math.round(point.elevation)} m`}
         </div>
       </div>
