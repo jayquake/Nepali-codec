@@ -26,7 +26,7 @@ export const budgetItems: BudgetItem[] = [
   // On the trail — carry as NPR from Kathmandu
   { id: 'comforts', label: 'Hot showers · charging · wifi', note: '~$15/day × 12', usd: 180, group: 'trail' },
   { id: 'drinks', label: 'Snacks & drinks (Coke/beer)', note: 'pricier at altitude', usd: 60, group: 'trail' },
-  { id: 'water', label: 'Boiled / filtered water', note: 'if not using a LifeStraw', usd: 30, group: 'trail' },
+  { id: 'water', label: 'Water (mostly LifeStraw)', note: 'small buffer for boiled water on freezing high-camp days', usd: 10, group: 'trail' },
   { id: 'tipguide', label: 'Guide tip (your share)', note: '~$10/day, lump at the end', usd: 100, group: 'trail' },
   { id: 'tipporter', label: 'Porter tip (your share)', note: '~$8/day', usd: 80, group: 'trail' },
   { id: 'jeeps', label: 'Jeeps buffer / upgrade', note: 'if not in the package, add more', usd: 40, group: 'trail' },
