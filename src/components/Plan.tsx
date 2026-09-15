@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useItinerary } from '../hooks/useItinerary';
 import { useBudget, budgetTotalUsd } from '../hooks/useBudget';
 import { useFxRate } from '../hooks/useFxRate';
@@ -25,6 +25,53 @@ import {
 } from '../data/kathmandu';
 
 type Section = 'itinerary' | 'after' | 'ktm' | 'budget';
+
+/**
+ * A number input that tolerates in-progress editing (empty / partial) instead of
+ * snapping back to a valid number on every keystroke. Commits valid numbers via
+ * onCommit and re-syncs only when the value changes externally (e.g. live rate).
+ */
+function NumberField({
+  value,
+  onCommit,
+  placeholder,
+}: {
+  value: number;
+  onCommit: (n: number) => void;
+  placeholder?: string;
+}) {
+  const [draft, setDraft] = useState<string>(() => String(value));
+  const lastNum = useRef<number>(value);
+
+  useEffect(() => {
+    if (value !== lastNum.current) {
+      lastNum.current = value;
+      setDraft(String(value));
+    }
+  }, [value]);
+
+  return (
+    <input
+      type="text"
+      inputMode="decimal"
+      value={draft}
+      placeholder={placeholder}
+      onChange={(e) => {
+        const v = e.target.value;
+        setDraft(v);
+        if (v.trim() === '') return;
+        const n = parseFloat(v);
+        if (Number.isFinite(n)) {
+          lastNum.current = n;
+          onCommit(n);
+        }
+      }}
+      onBlur={() => {
+        if (draft.trim() === '' || !Number.isFinite(parseFloat(draft))) setDraft(String(value));
+      }}
+    />
+  );
+}
 
 function fmtDate(iso: string): string {
   return new Date(iso + 'T00:00:00').toLocaleDateString(undefined, {
@@ -287,22 +334,29 @@ export function Plan() {
             <div className="row" style={{ gap: 12 }}>
               <label className="field" style={{ flex: 1, marginBottom: 0 }}>
                 <span className="small muted">NPR per US$</span>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  value={budget.rate}
-                  onChange={(e) => budget.setRate(parseFloat(e.target.value))}
-                />
+                <NumberField value={budget.rate} onCommit={(n) => budget.setRate(n)} />
               </label>
-              <label className="field" style={{ flex: 1, marginBottom: 0 }}>
+              <div className="field" style={{ flex: 1, marginBottom: 0 }}>
                 <span className="small muted">People</span>
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  value={budget.people}
-                  onChange={(e) => budget.setPeople(parseInt(e.target.value, 10))}
-                />
-              </label>
+                <div className="stepper">
+                  <button
+                    type="button"
+                    onClick={() => budget.setPeople(budget.people - 1)}
+                    disabled={budget.people <= 1}
+                    aria-label="Fewer people"
+                  >
+                    −
+                  </button>
+                  <span className="stepper__val">{budget.people}</span>
+                  <button
+                    type="button"
+                    onClick={() => budget.setPeople(budget.people + 1)}
+                    aria-label="More people"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
             </div>
             <div className="small muted" style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
               {fx.rate ? (
@@ -349,12 +403,7 @@ export function Plan() {
                         <div className="bud-row__amt">
                           <span className="bud-row__usd">
                             $
-                            <input
-                              type="number"
-                              inputMode="decimal"
-                              value={val}
-                              onChange={(e) => budget.setAmount(i.id, parseFloat(e.target.value))}
-                            />
+                            <NumberField value={val} onCommit={(n) => budget.setAmount(i.id, n)} />
                           </span>
                           <div className="small muted">
                             ₨{Math.round(val * budget.rate).toLocaleString()}
