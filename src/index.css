@@ -807,6 +807,58 @@ a {
   color: var(--text-dim);
 }
 
+.wx--tap {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.wx--tap:active {
+  transform: translateY(1px);
+}
+
+.wx-drow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.wx-drow:last-child {
+  border-bottom: 0;
+}
+
+.wx-drow__day {
+  flex: 0 0 72px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+.wx-drow__icon {
+  flex: none;
+  font-size: 20px;
+}
+
+.wx-drow__mid {
+  flex: 1;
+  min-width: 0;
+}
+
+.wx-drow__label {
+  font-size: 13px;
+}
+
+.wx-drow__temp {
+  flex: none;
+  font-size: 14px;
+}
+
 /* ---------- News / Journal ---------- */
 .chips {
   display: flex;

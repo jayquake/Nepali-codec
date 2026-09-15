@@ -7,6 +7,8 @@ export interface DailyForecast {
   tmax: number;
   tmin: number;
   precip: number;
+  precipProb: number | null;
+  windMax: number | null;
 }
 
 export interface PointWeather {
@@ -27,6 +29,8 @@ interface OpenMeteoResponse {
     temperature_2m_max: number[];
     temperature_2m_min: number[];
     precipitation_sum: number[];
+    precipitation_probability_max?: number[];
+    wind_speed_10m_max?: number[];
   };
 }
 
@@ -40,6 +44,8 @@ function normalize(d: OpenMeteoResponse | undefined): PointWeather {
         tmax: d.daily.temperature_2m_max[i],
         tmin: d.daily.temperature_2m_min[i],
         precip: d.daily.precipitation_sum[i],
+        precipProb: d.daily.precipitation_probability_max?.[i] ?? null,
+        windMax: d.daily.wind_speed_10m_max?.[i] ?? null,
       });
     }
   }
@@ -84,8 +90,8 @@ export function useWeather(points: WeatherPoint[]): WeatherState {
       const url =
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}` +
         `&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m` +
-        `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum` +
-        `&timezone=auto&forecast_days=5`;
+        `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max` +
+        `&timezone=auto&forecast_days=7`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Weather service returned ${res.status}.`);
       const json = (await res.json()) as OpenMeteoResponse | OpenMeteoResponse[];

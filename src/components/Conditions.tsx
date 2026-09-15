@@ -1,14 +1,23 @@
+import { useState } from 'react';
 import { useWeather } from '../hooks/useWeather';
-import { weatherPoints } from '../data/weatherPoints';
+import { weatherPoints, type WeatherPoint } from '../data/weatherPoints';
 import { weatherInfo } from '../data/weatherCodes';
 
 function dow(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString(undefined, { weekday: 'short' });
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'short' });
+}
+
+function fullDay(dateStr: string): string {
+  return new Date(dateStr + 'T00:00:00').toLocaleDateString(undefined, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
 }
 
 export function Conditions() {
   const { data, loading, error, updatedAt, reload } = useWeather(weatherPoints);
+  const [detail, setDetail] = useState<WeatherPoint | null>(null);
 
   return (
     <div className="view">
@@ -34,8 +43,9 @@ export function Conditions() {
       )}
 
       <div className="banner banner--info">
-        High-altitude weather changes fast. Temperatures shown are the free-air model estimate for
-        each point’s elevation; expect colder nights and strong wind chill on the Larke La.
+        High-altitude weather changes fast. Tap a place for its full 7-day forecast. Temperatures
+        are the free-air model estimate for each point’s elevation; expect colder nights and strong
+        wind chill on the Larke La.
       </div>
 
       {loading && !updatedAt && <div className="spinner">Loading forecast…</div>}
@@ -45,7 +55,12 @@ export function Conditions() {
         const cur = wx?.current;
         const info = weatherInfo(cur?.code);
         return (
-          <div key={p.id} className="wx">
+          <button
+            key={p.id}
+            className="wx wx--tap"
+            onClick={() => setDetail(p)}
+            aria-label={`${p.name} 7-day forecast`}
+          >
             <div className="wx__top">
               <span className="wx__icon" aria-hidden>
                 {info.icon}
@@ -61,13 +76,13 @@ export function Conditions() {
 
             {cur && (
               <div className="small muted" style={{ marginTop: 6 }}>
-                💨 {Math.round(cur.wind)} km/h wind · 💧 {cur.humidity}% humidity
+                💨 {Math.round(cur.wind)} km/h · 💧 {cur.humidity}% · tap for 7 days ›
               </div>
             )}
 
             {wx && wx.daily.length > 0 && (
               <div className="forecast">
-                {wx.daily.map((d) => {
+                {wx.daily.slice(0, 5).map((d) => {
                   const di = weatherInfo(d.code);
                   return (
                     <div key={d.date} className="fc-day">
@@ -82,9 +97,67 @@ export function Conditions() {
                 })}
               </div>
             )}
-          </div>
+          </button>
         );
       })}
+
+      {detail && (
+        <div className="sheet-backdrop" onClick={() => setDetail(null)}>
+          <div className="sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="spread" style={{ marginBottom: 4 }}>
+              <div style={{ fontWeight: 700 }}>
+                {detail.name} · {detail.ele.toLocaleString()} m
+              </div>
+              <button className="btn btn--sm btn--ghost" onClick={() => setDetail(null)}>
+                ✕
+              </button>
+            </div>
+
+            {(() => {
+              const wx = data[detail.id];
+              const cur = wx?.current;
+              if (cur) {
+                const info = weatherInfo(cur.code);
+                return (
+                  <div className="small muted" style={{ marginBottom: 10 }}>
+                    Now: {info.icon} {info.label} · {Math.round(cur.temperature)}° · 💨{' '}
+                    {Math.round(cur.wind)} km/h · 💧 {cur.humidity}%
+                  </div>
+                );
+              }
+              return null;
+            })()}
+
+            {data[detail.id]?.daily.map((d) => {
+              const di = weatherInfo(d.code);
+              return (
+                <div key={d.date} className="wx-drow">
+                  <div className="wx-drow__day">{fullDay(d.date)}</div>
+                  <div className="wx-drow__icon" aria-hidden>
+                    {di.icon}
+                  </div>
+                  <div className="wx-drow__mid">
+                    <div className="wx-drow__label">{di.label}</div>
+                    <div className="small muted">
+                      🌧️ {d.precipProb != null ? `${d.precipProb}%` : '—'}
+                      {d.precip > 0 ? ` · ${d.precip.toFixed(1)} mm` : ''}
+                      {d.windMax != null ? ` · 💨 ${Math.round(d.windMax)} km/h` : ''}
+                    </div>
+                  </div>
+                  <div className="wx-drow__temp">
+                    <b>{Math.round(d.tmax)}°</b>
+                    <span className="muted"> {Math.round(d.tmin)}°</span>
+                  </div>
+                </div>
+              );
+            })}
+
+            {!data[detail.id]?.daily.length && (
+              <div className="empty">No forecast available — try refreshing when online.</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
