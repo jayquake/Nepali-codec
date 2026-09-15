@@ -87,8 +87,9 @@ export function useWeather(points: WeatherPoint[]): WeatherState {
     try {
       const lat = points.map((p) => p.lat).join(',');
       const lng = points.map((p) => p.lng).join(',');
+      const elev = points.map((p) => p.ele).join(',');
       const url =
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}` +
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&elevation=${elev}` +
         `&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m` +
         `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max` +
         `&timezone=auto&forecast_days=7`;
