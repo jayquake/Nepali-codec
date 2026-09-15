@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useItinerary } from '../hooks/useItinerary';
+import { useBudget, budgetTotalUsd } from '../hooks/useBudget';
+import { budgetItems, GROUP_LABELS, type BudgetGroup } from '../data/budget';
 import { itinerary } from '../data/itinerary';
 import {
   afterTrek,
@@ -21,7 +23,7 @@ import {
   transportNote,
 } from '../data/kathmandu';
 
-type Section = 'itinerary' | 'after' | 'ktm';
+type Section = 'itinerary' | 'after' | 'ktm' | 'budget';
 
 function fmtDate(iso: string): string {
   return new Date(iso + 'T00:00:00').toLocaleDateString(undefined, {
@@ -33,8 +35,13 @@ function fmtDate(iso: string): string {
 
 export function Plan() {
   const it = useItinerary();
+  const budget = useBudget();
   const [section, setSection] = useState<Section>('itinerary');
   const doneCount = itinerary.filter((d) => it.done[d.id]).length;
+  const totalUsd = budgetTotalUsd(budget.amount);
+  const trailUsd = budgetItems
+    .filter((i) => i.group === 'trail')
+    .reduce((s, i) => s + budget.amount(i.id, i.usd), 0);
 
   return (
     <div className="view">
@@ -55,7 +62,13 @@ export function Plan() {
           className={`seg${section === 'ktm' ? ' seg--active' : ''}`}
           onClick={() => setSection('ktm')}
         >
-          🏙️ Kathmandu
+          🏙️ KTM
+        </button>
+        <button
+          className={`seg${section === 'budget' ? ' seg--active' : ''}`}
+          onClick={() => setSection('budget')}
+        >
+          💵 Budget
         </button>
       </div>
 
@@ -250,6 +263,104 @@ export function Plan() {
                 </li>
               ))}
             </ul>
+          </div>
+        </>
+      )}
+
+      {section === 'budget' && (
+        <>
+          <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 8 }}>Cash budget · per person</div>
+          <div className="banner banner--warn">
+            No ATMs on the Manaslu trail — draw &amp; exchange NPR in Kathmandu; teahouses are
+            cash-only. Assumes an inclusive package (permits, guide, porter, lodging, meals,
+            transport). Amounts are editable &amp; saved on this device.
+          </div>
+
+          <div className="card">
+            <div className="row" style={{ gap: 12 }}>
+              <label className="field" style={{ flex: 1, marginBottom: 0 }}>
+                <span className="small muted">NPR per US$</span>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  value={budget.rate}
+                  onChange={(e) => budget.setRate(parseFloat(e.target.value))}
+                />
+              </label>
+              <label className="field" style={{ flex: 1, marginBottom: 0 }}>
+                <span className="small muted">People</span>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  value={budget.people}
+                  onChange={(e) => budget.setPeople(parseInt(e.target.value, 10))}
+                />
+              </label>
+            </div>
+          </div>
+
+          {(['trail', 'ktm', 'contingency'] as BudgetGroup[]).map((group) => {
+            const items = budgetItems.filter((i) => i.group === group);
+            const sub = items.reduce((s, i) => s + budget.amount(i.id, i.usd), 0);
+            return (
+              <div key={group}>
+                <div className="section-title">
+                  {GROUP_LABELS[group]} · ${Math.round(sub)}
+                </div>
+                <div className="card">
+                  {items.map((i) => {
+                    const val = budget.amount(i.id, i.usd);
+                    return (
+                      <div key={i.id} className="bud-row">
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div className="bud-row__label">{i.label}</div>
+                          {i.note && <div className="small muted">{i.note}</div>}
+                        </div>
+                        <div className="bud-row__amt">
+                          <span className="bud-row__usd">
+                            $
+                            <input
+                              type="number"
+                              inputMode="decimal"
+                              value={val}
+                              onChange={(e) => budget.setAmount(i.id, parseFloat(e.target.value))}
+                            />
+                          </span>
+                          <div className="small muted">
+                            ₨{Math.round(val * budget.rate).toLocaleString()}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="card" style={{ borderColor: '#2f6d4d' }}>
+            <div className="spread">
+              <b>Per person</b>
+              <b style={{ color: 'var(--accent-strong)' }}>
+                ${Math.round(totalUsd)} · ₨{Math.round(totalUsd * budget.rate).toLocaleString()}
+              </b>
+            </div>
+            <div className="spread" style={{ marginTop: 6 }}>
+              <span className="small muted">Carry as NPR for the trail</span>
+              <span className="small">₨{Math.round(trailUsd * budget.rate).toLocaleString()}</span>
+            </div>
+            {budget.people > 1 && (
+              <div className="spread" style={{ marginTop: 6 }}>
+                <span className="small muted">Group total ({budget.people})</span>
+                <b>
+                  ${Math.round(totalUsd * budget.people)} · ₨
+                  {Math.round(totalUsd * budget.people * budget.rate).toLocaleString()}
+                </b>
+              </div>
+            )}
+            <button className="btn btn--sm btn--ghost" style={{ marginTop: 10 }} onClick={budget.reset}>
+              Reset to defaults
+            </button>
           </div>
         </>
       )}

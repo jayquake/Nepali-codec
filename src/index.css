@@ -201,6 +201,48 @@ a {
   color: var(--accent-ink);
 }
 
+/* ---------- Budget ---------- */
+.bud-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.bud-row:last-child {
+  border-bottom: 0;
+}
+
+.bud-row__label {
+  font-size: 13.5px;
+}
+
+.bud-row__amt {
+  flex: none;
+  text-align: right;
+}
+
+.bud-row__usd {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 13.5px;
+  color: var(--text);
+}
+
+.bud-row__usd input {
+  width: 68px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 6px 8px;
+  text-align: right;
+}
+
 /* ---------- Itinerary / Plan ---------- */
 .itin {
   display: flex;
