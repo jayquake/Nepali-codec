@@ -57,7 +57,7 @@ export function Plan() {
           className={`seg${section === 'itinerary' ? ' seg--active' : ''}`}
           onClick={() => setSection('itinerary')}
         >
-          📅 Itinerary
+          📅 Days
         </button>
         <button
           className={`seg${section === 'after' ? ' seg--active' : ''}`}
@@ -75,7 +75,7 @@ export function Plan() {
           className={`seg${section === 'budget' ? ' seg--active' : ''}`}
           onClick={() => setSection('budget')}
         >
-          💵 Budget
+          💵 Cash
         </button>
       </div>
 
