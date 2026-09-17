@@ -282,6 +282,38 @@ a {
   text-align: right;
 }
 
+.cash-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cash-row:last-child {
+  border-bottom: 0;
+}
+
+.cash-row__title {
+  font-size: 13.5px;
+}
+
+.cash-row__amt {
+  flex: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.cash-row__del {
+  flex: none;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+
 /* ---------- Itinerary / Plan ---------- */
 .itin {
   display: flex;

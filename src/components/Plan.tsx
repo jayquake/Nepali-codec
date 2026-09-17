@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useItinerary } from '../hooks/useItinerary';
 import { useBudget, budgetTotalUsd } from '../hooks/useBudget';
 import { useFxRate } from '../hooks/useFxRate';
+import { CashTracker } from './CashTracker';
 import { budgetItems, GROUP_LABELS, type BudgetGroup } from '../data/budget';
 import { itinerary } from '../data/itinerary';
 import {
@@ -86,6 +87,7 @@ export function Plan() {
   const budget = useBudget();
   const fx = useFxRate();
   const [section, setSection] = useState<Section>('itinerary');
+  const [cashMode, setCashMode] = useState<'plan' | 'log'>('plan');
 
   // Auto-apply the live USD→NPR rate unless the user has set one manually.
   useEffect(() => {
@@ -323,6 +325,25 @@ export function Plan() {
 
       {section === 'budget' && (
         <>
+          <div className="chips" style={{ marginBottom: 10 }}>
+            <button
+              className={`chip${cashMode === 'plan' ? ' chip--active' : ''}`}
+              onClick={() => setCashMode('plan')}
+            >
+              Estimate
+            </button>
+            <button
+              className={`chip${cashMode === 'log' ? ' chip--active' : ''}`}
+              onClick={() => setCashMode('log')}
+            >
+              Spending log
+            </button>
+          </div>
+
+          {cashMode === 'log' && <CashTracker rate={budget.rate} />}
+
+          {cashMode === 'plan' && (
+          <>
           <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 8 }}>Cash budget · per person</div>
           <div className="banner banner--warn">
             No ATMs on the Manaslu trail — draw &amp; exchange NPR in Kathmandu; teahouses are
@@ -441,6 +462,8 @@ export function Plan() {
               Reset to defaults
             </button>
           </div>
+          </>
+          )}
         </>
       )}
     </div>
