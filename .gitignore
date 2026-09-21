@@ -21,5 +21,9 @@ npm-debug.log*
 # Vite / PWA generated
 dev-dist/
 
+# Playwright
+test-results/
+playwright-report/
+
 # Supabase CLI local temp
 supabase/.temp/
