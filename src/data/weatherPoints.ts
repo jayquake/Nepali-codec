@@ -15,6 +15,7 @@ export const weatherPoints: WeatherPoint[] = [
   { id: 'wp-machhakhola', name: 'Machha Khola', lat: 28.348, lng: 84.895, ele: 900 },
   { id: 'wp-jagat', name: 'Jagat', lat: 28.451, lng: 84.858, ele: 1340 },
   { id: 'wp-deng', name: 'Deng', lat: 28.523, lng: 84.845, ele: 1860 },
+  { id: 'wp-ghap', name: 'Ghap', lat: 28.53, lng: 84.803, ele: 2160 },
   { id: 'wp-namrung', name: 'Namrung', lat: 28.541, lng: 84.797, ele: 2630 },
   { id: 'wp-lho', name: 'Lho', lat: 28.573, lng: 84.74, ele: 3180 },
   { id: 'wp-samagaon', name: 'Sama Gaun', lat: 28.606, lng: 84.629, ele: 3530 },

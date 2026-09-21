@@ -1,5 +1,6 @@
 // Day-by-day trip plan with the ACTUAL dates for this trip (Sep–Oct 2026).
-// Source: the group's dated schedule. Edit here if plans change.
+// Source: the group's dated schedule. Updated on the trail (extra night at Ghap
+// between Deng and Namrung, shifting later days by one). Edit here if plans change.
 
 export type DayKind = 'fly' | 'city' | 'travel' | 'trek' | 'rest' | 'pass';
 
@@ -56,24 +57,33 @@ export const itinerary: ItineraryDay[] = [
     kind: 'trek',
   },
   {
-    id: 'd-t3',
+    id: 'd-ghap',
     date: '2026-09-21',
     icon: '🥾',
-    title: 'Deng → Namrung',
-    detail: 'Cross to Buddhist country via Ghap; climb to Namrung (~2,630 m). Permit check.',
+    title: 'Deng → Ghap',
+    detail:
+      'Short day up the gorge, crossing the river to Ghap (~2,160 m) — mani walls, prayer wheels, pine forest. Night at Ghap (added on the trail).',
+    kind: 'trek',
+  },
+  {
+    id: 'd-t3',
+    date: '2026-09-22',
+    icon: '🥾',
+    title: 'Ghap → Namrung',
+    detail: 'Climb through forest to the permit checkpoint at Namrung (~2,630 m); first high-peak views.',
     kind: 'trek',
   },
   {
     id: 'd-t4',
-    date: '2026-09-22',
+    date: '2026-09-23',
     icon: '🥾',
     title: 'Namrung → Lho',
-    detail: 'Through Lihi & Sho to Lho (~3,180 m) — first big Manaslu views, Ribung Gompa.',
+    detail: 'Through Lihi & Sho to Lho (~3,180 m) — big Manaslu views, Ribung Gompa.',
     kind: 'trek',
   },
   {
     id: 'd-t5',
-    date: '2026-09-23',
+    date: '2026-09-24',
     icon: '🥾',
     title: 'Lho → Sama Gaun',
     detail: 'Through Shyala to Sama Gaun / Samagaon (~3,530 m), the acclimatisation hub.',
@@ -81,7 +91,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-accl',
-    date: '2026-09-24',
+    date: '2026-09-25',
     icon: '🧗',
     title: 'Acclimatisation — Sama Gaun',
     detail:
@@ -90,7 +100,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-t6',
-    date: '2026-09-25',
+    date: '2026-09-26',
     icon: '🥾',
     title: 'Sama Gaun → Samdo',
     detail: 'Gentle high-valley walk to Samdo (~3,860 m), the last permanent village.',
@@ -98,7 +108,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-t7',
-    date: '2026-09-26',
+    date: '2026-09-27',
     icon: '🥾',
     title: 'Samdo → Dharamsala',
     detail: 'Short climb to Dharamsala / Larke Phedi (~4,460 m). Rest early for the pass.',
@@ -106,7 +116,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-pass',
-    date: '2026-09-27',
+    date: '2026-09-28',
     icon: '🏔️',
     title: 'Dharamsala → Larkya La → Bhimthang',
     detail:
@@ -115,7 +125,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-t8',
-    date: '2026-09-28',
+    date: '2026-09-29',
     icon: '🥾',
     title: 'Bhimthang → Dharapani',
     detail: 'Long descent through forest via Karche/Gho/Tilije to Dharapani (~1,860 m), joining the Annapurna Circuit.',
@@ -123,7 +133,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-drive-out',
-    date: '2026-09-29',
+    date: '2026-09-30',
     icon: '🚙',
     title: 'Dharapani → Kathmandu',
     detail: 'Jeep out via Besisahar back to Kathmandu.',
@@ -131,10 +141,10 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-buffer',
-    date: '2026-09-30',
+    date: '2026-10-01',
     icon: '🏙️',
     title: 'Kathmandu — buffer / rest',
-    detail: '30 Sep–2 Oct: contingency + celebration. Rest, souvenirs, repack. A nicer hotel post-trek.',
+    detail: '1–2 Oct: contingency + celebration. Rest, souvenirs, repack. A nicer hotel post-trek.',
     kind: 'city',
   },
   {
