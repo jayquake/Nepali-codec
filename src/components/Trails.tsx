@@ -8,6 +8,7 @@ import {
   stages,
   totalDistanceKm,
 } from '../data/trail';
+import { routeGeometry } from '../data/routeGeometry.generated';
 
 export function Trails({
   progress,
@@ -69,10 +70,14 @@ export function Trails({
 
       {stages.map((stage) => {
         const done = progress.isDone(stage.id);
+        const geo = routeGeometry[stage.id];
         const start = stage.waypoints[0];
         const dest = stage.waypoints[stage.waypoints.length - 1];
-        const elevations = stage.waypoints.map((w) => w.ele);
-        const coords = stage.waypoints.map((w) => [w.lat, w.lng] as [number, number]);
+        // Prefer the generated smooth profile + trail-snapped line; fall back to waypoints.
+        const elevations = geo?.elev?.length ? geo.elev : stage.waypoints.map((w) => w.ele);
+        const coords = geo?.line?.length
+          ? geo.line
+          : stage.waypoints.map((w) => [w.lat, w.lng] as [number, number]);
         const isRest = stage.distanceKm === 0;
         return (
           <div key={stage.id} className={`stage${done ? ' stage--done' : ''}`}>
