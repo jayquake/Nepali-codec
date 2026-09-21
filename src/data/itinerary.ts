@@ -69,29 +69,23 @@ export const itinerary: ItineraryDay[] = [
     id: 'd-t3',
     date: '2026-09-22',
     icon: '🥾',
-    title: 'Ghap → Namrung',
-    detail: 'Climb through forest to the permit checkpoint at Namrung (~2,630 m); first high-peak views.',
+    title: 'Ghap → Lihi',
+    detail:
+      'Past the Namrung checkpoint and on to Lihi (~2,920 m) — mani walls, first big Manaslu views. Night at Lihi.',
     kind: 'trek',
   },
   {
     id: 'd-t4',
     date: '2026-09-23',
     icon: '🥾',
-    title: 'Namrung → Lho',
-    detail: 'Through Lihi & Sho to Lho (~3,180 m) — big Manaslu views, Ribung Gompa.',
-    kind: 'trek',
-  },
-  {
-    id: 'd-t5',
-    date: '2026-09-24',
-    icon: '🥾',
-    title: 'Lho → Sama Gaun',
-    detail: 'Through Shyala to Sama Gaun / Samagaon (~3,530 m), the acclimatisation hub.',
+    title: 'Lihi → Shyala / Sama Gaun',
+    detail:
+      'Through Sho and Lho (Ribung Gompa) to Shyala (~3,500 m) or on to Sama Gaun / Samagaon (~3,530 m), the acclimatisation hub. (Overnight TBD on the trail.)',
     kind: 'trek',
   },
   {
     id: 'd-accl',
-    date: '2026-09-25',
+    date: '2026-09-24',
     icon: '🧗',
     title: 'Acclimatisation — Sama Gaun',
     detail:
@@ -100,7 +94,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-t6',
-    date: '2026-09-26',
+    date: '2026-09-25',
     icon: '🥾',
     title: 'Sama Gaun → Samdo',
     detail: 'Gentle high-valley walk to Samdo (~3,860 m), the last permanent village.',
@@ -108,7 +102,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-t7',
-    date: '2026-09-27',
+    date: '2026-09-26',
     icon: '🥾',
     title: 'Samdo → Dharamsala',
     detail: 'Short climb to Dharamsala / Larke Phedi (~4,460 m). Rest early for the pass.',
@@ -116,7 +110,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-pass',
-    date: '2026-09-28',
+    date: '2026-09-27',
     icon: '🏔️',
     title: 'Dharamsala → Larkya La → Bhimthang',
     detail:
@@ -125,7 +119,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-t8',
-    date: '2026-09-29',
+    date: '2026-09-28',
     icon: '🥾',
     title: 'Bhimthang → Dharapani',
     detail: 'Long descent through forest via Karche/Gho/Tilije to Dharapani (~1,860 m), joining the Annapurna Circuit.',
@@ -133,7 +127,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-drive-out',
-    date: '2026-09-30',
+    date: '2026-09-29',
     icon: '🚙',
     title: 'Dharapani → Kathmandu',
     detail: 'Jeep out via Besisahar back to Kathmandu.',
@@ -141,10 +135,10 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     id: 'd-buffer',
-    date: '2026-10-01',
+    date: '2026-09-30',
     icon: '🏙️',
     title: 'Kathmandu — buffer / rest',
-    detail: '1–2 Oct: contingency + celebration. Rest, souvenirs, repack. A nicer hotel post-trek.',
+    detail: '30 Sep–2 Oct: contingency + celebration. Rest, souvenirs, repack. A nicer hotel post-trek.',
     kind: 'city',
   },
   {
