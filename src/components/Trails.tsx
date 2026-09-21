@@ -60,9 +60,9 @@ export function Trails({
       </div>
 
       <div className="banner banner--warn">
-        ⚠️ Altitude: above ~3,000 m ascend slowly and take the acclimatisation days at Samagaon
-        and Samdo. Descend if you get worsening headache, nausea or breathlessness (signs of AMS).
-        A registered guide is mandatory on this restricted route.
+        ⚠️ Altitude: above ~3,000 m ascend slowly and take the acclimatisation day at Sama Gaun
+        (day hike to Base Camp / Birendra Lake). Descend if you get worsening headache, nausea or
+        breathlessness (signs of AMS). A registered guide is mandatory on this restricted route.
       </div>
 
       <div className="section-title">Daily stages · total ~{Math.round(totalDistanceKm)} km</div>
@@ -82,7 +82,14 @@ export function Trails({
                 <div className="stage__title">
                   {stage.from} → {stage.to}
                 </div>
-                <div className="stage__sub">{stage.hours}</div>
+                <div className="stage__sub">
+                  {new Date(stage.date + 'T00:00:00').toLocaleDateString(undefined, {
+                    weekday: 'short',
+                    day: 'numeric',
+                    month: 'short',
+                  })}{' '}
+                  · {stage.hours}
+                </div>
               </div>
               <label className="check">
                 <span>{done ? 'Done' : 'Mark'}</span>

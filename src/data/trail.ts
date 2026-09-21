@@ -1,5 +1,10 @@
 // Manaslu Circuit Trek — route data.
 //
+// This is OUR actual walked route (Sep 2026), matching the day-by-day plan in
+// src/data/itinerary.ts: trailhead at Machha Khola, an extra night added at Ghap,
+// Ghap → Lihi, Lihi → Shyala / Sama Gaun, one acclimatisation day at Sama Gaun,
+// then Samdo, Dharamsala, over Larke La to Bhimthang and out to Dharapani.
+//
 // Coordinates and elevations are approximate waypoints intended for MAPPING and
 // planning only. They are NOT survey-grade and must NOT be used for turn-by-turn
 // navigation in the field — always carry an offline topo map, a GPS device and a
@@ -18,6 +23,8 @@ export interface Waypoint {
 export interface Stage {
   id: string;
   day: number;
+  /** Actual calendar date for this stage, YYYY-MM-DD (matches itinerary.ts). */
+  date: string;
   from: string;
   to: string;
   /** Approximate walking distance for the stage, in km. 0 for rest / acclimatisation days. */
@@ -34,9 +41,10 @@ export interface Stage {
 
 export const TREK_NAME = 'Manaslu Circuit Trek';
 export const TREK_SUMMARY =
-  'A ~14-day teahouse circuit around Mt. Manaslu (8,163 m), the world’s 8th-highest ' +
-  'peak, crossing the Larke La pass (5,106 m). A restricted area: Restricted Area Permit ' +
-  '(RAP) + Manaslu (MCAP) + Annapurna (ACAP) permits and a registered guide are required.';
+  'Our ~10-day teahouse trek around Mt. Manaslu (8,163 m), the world’s 8th-highest ' +
+  'peak, crossing the Larke La pass (5,106 m) from Machha Khola to Dharapani. A restricted ' +
+  'area: Restricted Area Permit (RAP) + Manaslu (MCAP) + Annapurna (ACAP) permits and a ' +
+  'registered guide are required.';
 
 export const PERMITS = [
   'Restricted Area Permit (RAP) — Jagat to Dharapani section',
@@ -52,25 +60,7 @@ export const stages: Stage[] = [
   {
     id: 'stage-1',
     day: 1,
-    from: 'Soti Khola',
-    to: 'Machha Khola',
-    distanceKm: 14,
-    ascentM: 380,
-    descentM: 210,
-    maxEleM: 930,
-    hours: '5–6 h',
-    description:
-      'Warm, low-altitude start along the Budhi Gandaki through Sal forest and rice terraces, ' +
-      'crossing suspension bridges to the riverside village of Machha Khola.',
-    waypoints: [
-      { name: 'Soti Khola', lat: 28.293, lng: 84.876, ele: 730 },
-      { name: 'Khursane', lat: 28.316, lng: 84.884, ele: 810 },
-      { name: 'Machha Khola', lat: 28.348, lng: 84.895, ele: 900 },
-    ],
-  },
-  {
-    id: 'stage-2',
-    day: 2,
+    date: '2026-09-19',
     from: 'Machha Khola',
     to: 'Jagat',
     distanceKm: 22,
@@ -79,8 +69,9 @@ export const stages: Stage[] = [
     maxEleM: 1410,
     hours: '6–7 h',
     description:
-      'Past the hot springs at Tatopani, up stone staircases to Dobhan and Yaru, then a climb ' +
-      'to the flagstone-paved village of Jagat, where the restricted-area permit is checked.',
+      'Up the Budhi Gandaki past the hot springs at Tatopani, over stone staircases through ' +
+      'Dobhan and Yaru, then a climb to the flagstone-paved village of Jagat, where the ' +
+      'restricted-area permit is checked.',
     waypoints: [
       { name: 'Machha Khola', lat: 28.348, lng: 84.895, ele: 900 },
       { name: 'Tatopani (hot spring)', lat: 28.374, lng: 84.888, ele: 990 },
@@ -89,8 +80,9 @@ export const stages: Stage[] = [
     ],
   },
   {
-    id: 'stage-3',
-    day: 3,
+    id: 'stage-2',
+    day: 2,
+    date: '2026-09-20',
     from: 'Jagat',
     to: 'Deng',
     distanceKm: 20,
@@ -109,82 +101,89 @@ export const stages: Stage[] = [
     ],
   },
   {
-    id: 'stage-4',
-    day: 4,
+    id: 'stage-3',
+    day: 3,
+    date: '2026-09-21',
     from: 'Deng',
-    to: 'Namrung',
-    distanceKm: 19,
-    ascentM: 980,
-    descentM: 210,
-    maxEleM: 2660,
-    hours: '6–7 h',
+    to: 'Ghap',
+    distanceKm: 10,
+    ascentM: 450,
+    descentM: 150,
+    maxEleM: 2200,
+    hours: '3–4 h',
     description:
-      'Cross to the north bank at Ghap and enter Buddhist country — mani walls, prayer ' +
-      'wheels and pine forest — climbing to the permit checkpoint at Namrung with first ' +
-      'glimpses of the high peaks.',
+      'A short day up the gorge, crossing and re-crossing the river into Buddhist country — ' +
+      'mani walls, prayer wheels and pine forest — to the hamlet of Ghap. Overnight added ' +
+      'here on the trail to ease the climb.',
     waypoints: [
       { name: 'Deng', lat: 28.523, lng: 84.845, ele: 1860 },
+      { name: 'Rana', lat: 28.527, lng: 84.822, ele: 1980 },
+      { name: 'Ghap', lat: 28.530, lng: 84.803, ele: 2160 },
+    ],
+  },
+  {
+    id: 'stage-4',
+    day: 4,
+    date: '2026-09-22',
+    from: 'Ghap',
+    to: 'Lihi',
+    distanceKm: 11,
+    ascentM: 900,
+    descentM: 140,
+    maxEleM: 2920,
+    hours: '4–5 h',
+    description:
+      'Climb through forest to the permit checkpoint at Namrung, then on past mani walls to ' +
+      'Lihi with its chortens and first big views of Manaslu and the high peaks.',
+    waypoints: [
       { name: 'Ghap', lat: 28.530, lng: 84.803, ele: 2160 },
       { name: 'Namrung', lat: 28.541, lng: 84.797, ele: 2630 },
+      { name: 'Lihi', lat: 28.552, lng: 84.768, ele: 2920 },
     ],
   },
   {
     id: 'stage-5',
     day: 5,
-    from: 'Namrung',
-    to: 'Lho',
-    distanceKm: 10,
-    ascentM: 620,
-    descentM: 70,
-    maxEleM: 3180,
-    hours: '3–4 h',
+    date: '2026-09-23',
+    from: 'Lihi',
+    to: 'Shyala / Sama Gaun',
+    distanceKm: 14,
+    ascentM: 800,
+    descentM: 190,
+    maxEleM: 3530,
+    hours: '5–6 h',
     description:
-      'A shorter day through Lihi and Sho with big views. Lho offers a stunning sunset on ' +
-      'Manaslu and the hilltop Ribung Gompa — an important acclimatisation step.',
+      'Through Sho and Lho (hilltop Ribung Gompa, sunset on Manaslu) to Shyala, ringed by ' +
+      'Himalchuli, Manaslu and Ngadi Chuli, and on to the Tibetan-style village of ' +
+      'Sama Gaun — the acclimatisation hub. Overnight at Shyala or Sama Gaun (decided on the trail).',
     waypoints: [
-      { name: 'Namrung', lat: 28.541, lng: 84.797, ele: 2630 },
       { name: 'Lihi', lat: 28.552, lng: 84.768, ele: 2920 },
       { name: 'Lho', lat: 28.573, lng: 84.740, ele: 3180 },
+      { name: 'Shyala', lat: 28.590, lng: 84.662, ele: 3500 },
+      { name: 'Sama Gaun', lat: 28.606, lng: 84.629, ele: 3530 },
     ],
   },
   {
     id: 'stage-6',
     day: 6,
-    from: 'Lho',
-    to: 'Samagaon',
-    distanceKm: 8,
-    ascentM: 420,
-    descentM: 70,
-    maxEleM: 3530,
-    hours: '3–4 h',
-    description:
-      'Through Shyala, ringed by Himalchuli, Manaslu and Ngadi Chuli, to the large Tibetan-style ' +
-      'village of Samagaon — the hub for acclimatisation and side trips.',
-    waypoints: [
-      { name: 'Lho', lat: 28.573, lng: 84.740, ele: 3180 },
-      { name: 'Shyala', lat: 28.590, lng: 84.662, ele: 3500 },
-      { name: 'Samagaon', lat: 28.606, lng: 84.629, ele: 3530 },
-    ],
-  },
-  {
-    id: 'stage-7',
-    day: 7,
-    from: 'Samagaon',
-    to: 'Samagaon (acclimatisation)',
+    date: '2026-09-24',
+    from: 'Sama Gaun',
+    to: 'Sama Gaun (acclimatisation)',
     distanceKm: 0,
     ascentM: 0,
     descentM: 0,
-    maxEleM: 4400,
+    maxEleM: 4800,
     hours: 'Rest day',
     description:
       'Acclimatisation day. Options: day hike to Manaslu Base Camp (~4,800 m) or the turquoise ' +
       'Birendra Lake and Pungyen Gompa. Climb high, sleep low — do not skip this.',
-    waypoints: [{ name: 'Samagaon', lat: 28.606, lng: 84.629, ele: 3530 }],
+    waypoints: [{ name: 'Sama Gaun', lat: 28.606, lng: 84.629, ele: 3530 }],
   },
   {
-    id: 'stage-8',
-    day: 8,
-    from: 'Samagaon',
+    id: 'stage-7',
+    day: 7,
+    date: '2026-09-25',
+    from: 'Sama Gaun',
     to: 'Samdo',
     distanceKm: 8,
     ascentM: 380,
@@ -195,29 +194,15 @@ export const stages: Stage[] = [
       'A gentle high-valley walk above the tree line, following the Budhi Gandaki toward the ' +
       'Tibet border to Samdo, the last permanent village on the circuit.',
     waypoints: [
-      { name: 'Samagaon', lat: 28.606, lng: 84.629, ele: 3530 },
+      { name: 'Sama Gaun', lat: 28.606, lng: 84.629, ele: 3530 },
       { name: 'Kermo Kharka', lat: 28.626, lng: 84.628, ele: 3700 },
       { name: 'Samdo', lat: 28.640, lng: 84.630, ele: 3860 },
     ],
   },
   {
-    id: 'stage-9',
-    day: 9,
-    from: 'Samdo',
-    to: 'Samdo (acclimatisation)',
-    distanceKm: 0,
-    ascentM: 0,
-    descentM: 0,
-    maxEleM: 4900,
-    hours: 'Rest day',
-    description:
-      'Second acclimatisation day. A hike toward the Rui La pass on the old Tibet trade route ' +
-      '(~4,900 m) prepares the body for the Larke La crossing.',
-    waypoints: [{ name: 'Samdo', lat: 28.640, lng: 84.630, ele: 3860 }],
-  },
-  {
-    id: 'stage-10',
-    day: 10,
+    id: 'stage-8',
+    day: 8,
+    date: '2026-09-26',
     from: 'Samdo',
     to: 'Dharamsala (Larke Phedi)',
     distanceKm: 7,
@@ -235,10 +220,11 @@ export const stages: Stage[] = [
     ],
   },
   {
-    id: 'stage-11',
-    day: 11,
+    id: 'stage-9',
+    day: 9,
+    date: '2026-09-27',
     from: 'Dharamsala',
-    to: 'Bimthang',
+    to: 'Bhimthang',
     distanceKm: 25,
     ascentM: 650,
     descentM: 1390,
@@ -246,47 +232,32 @@ export const stages: Stage[] = [
     hours: '8–10 h',
     description:
       'The big day. A pre-dawn start up moraine to the prayer-flag-draped Larke La (5,106 m), ' +
-      'then a long, knee-testing descent past glaciers to the meadows of Bimthang.',
+      'then a long, knee-testing descent past glaciers to the meadows of Bhimthang.',
     waypoints: [
       { name: 'Dharamsala (Larke Phedi)', lat: 28.657, lng: 84.575, ele: 4460 },
       { name: 'Larke La Pass', lat: 28.671, lng: 84.508, ele: 5106 },
-      { name: 'Bimthang', lat: 28.648, lng: 84.451, ele: 3720 },
+      { name: 'Bhimthang', lat: 28.648, lng: 84.451, ele: 3720 },
     ],
   },
   {
-    id: 'stage-12',
-    day: 12,
-    from: 'Bimthang',
-    to: 'Tilije',
+    id: 'stage-10',
+    day: 10,
+    date: '2026-09-28',
+    from: 'Bhimthang',
+    to: 'Dharapani',
     distanceKm: 25,
     ascentM: 120,
-    descentM: 1540,
+    descentM: 1980,
     maxEleM: 3720,
-    hours: '6–7 h',
+    hours: '7–8 h',
     description:
-      'Descend through rhododendron and pine forest along the Dudh Khola, past Karche and Gho, ' +
-      'to the Gurung village of Tilije with its apple orchards and lower, warmer air.',
+      'The final walk: down through rhododendron and pine forest along the Dudh Khola past ' +
+      'Karche, Gho and Tilije, then Thonje to Dharapani — joining the Annapurna Circuit and the ' +
+      'road head, where jeeps run to Besisahar and on to Kathmandu.',
     waypoints: [
-      { name: 'Bimthang', lat: 28.648, lng: 84.451, ele: 3720 },
+      { name: 'Bhimthang', lat: 28.648, lng: 84.451, ele: 3720 },
       { name: 'Karche', lat: 28.598, lng: 84.418, ele: 2785 },
       { name: 'Gho', lat: 28.575, lng: 84.408, ele: 2515 },
-      { name: 'Tilije', lat: 28.560, lng: 84.400, ele: 2300 },
-    ],
-  },
-  {
-    id: 'stage-13',
-    day: 13,
-    from: 'Tilije',
-    to: 'Dharapani',
-    distanceKm: 9,
-    ascentM: 120,
-    descentM: 560,
-    maxEleM: 2300,
-    hours: '2–3 h',
-    description:
-      'A short final walk to Dharapani, joining the Annapurna Circuit and the road head. From ' +
-      'here jeeps run to Besisahar and on to Kathmandu or Pokhara.',
-    waypoints: [
       { name: 'Tilije', lat: 28.560, lng: 84.400, ele: 2300 },
       { name: 'Thonje', lat: 28.540, lng: 84.372, ele: 1965 },
       { name: 'Dharapani', lat: 28.523, lng: 84.362, ele: 1860 },
