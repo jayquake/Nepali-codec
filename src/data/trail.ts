@@ -75,10 +75,12 @@ export const stages: Stage[] = [
       'Dobhan and Yaru, then a climb to the flagstone-paved village of Jagat, where the ' +
       'restricted-area permit is checked.',
     waypoints: [
-      { name: 'Machha Khola', lat: 28.348, lng: 84.895, ele: 900 },
-      { name: 'Tatopani (hot spring)', lat: 28.374, lng: 84.888, ele: 990 },
-      { name: 'Dobhan', lat: 28.408, lng: 84.878, ele: 1070 },
-      { name: 'Jagat', lat: 28.451, lng: 84.858, ele: 1340 },
+      { name: 'Machha Khola', lat: 28.2293, lng: 84.8738, ele: 900 },
+      { name: 'Khorlabesi', lat: 28.2544, lng: 84.8831, ele: 970 },
+      { name: 'Tatopani (hot spring)', lat: 28.2757, lng: 84.8985, ele: 990 },
+      { name: 'Dobhan', lat: 28.2955, lng: 84.9059, ele: 1070 },
+      { name: 'Yaru', lat: 28.3254, lng: 84.9081, ele: 1170 },
+      { name: 'Jagat', lat: 28.3514, lng: 84.8959, ele: 1340 },
     ],
   },
   {
@@ -96,10 +98,11 @@ export const stages: Stage[] = [
       'Through Philim and Ekle Bhatti, where the Tsum Valley trail branches off, into the ' +
       'steep, narrowing Budhi Gandaki gorge to the small settlement of Deng.',
     waypoints: [
-      { name: 'Jagat', lat: 28.451, lng: 84.858, ele: 1340 },
-      { name: 'Philim', lat: 28.484, lng: 84.833, ele: 1590 },
-      { name: 'Ekle Bhatti', lat: 28.505, lng: 84.836, ele: 1600 },
-      { name: 'Deng', lat: 28.523, lng: 84.845, ele: 1860 },
+      { name: 'Jagat', lat: 28.3514, lng: 84.8959, ele: 1340 },
+      { name: 'Sirdibas', lat: 28.3809, lng: 84.8891, ele: 1420 },
+      { name: 'Philim', lat: 28.3933, lng: 84.8966, ele: 1590 },
+      { name: 'Ekle Bhatti', lat: 28.4091, lng: 84.8945, ele: 1600 },
+      { name: 'Deng', lat: 28.4791, lng: 84.867, ele: 1860 },
     ],
   },
   {
@@ -118,9 +121,8 @@ export const stages: Stage[] = [
       'mani walls, prayer wheels and pine forest — to the hamlet of Ghap. Overnight added ' +
       'here on the trail to ease the climb.',
     waypoints: [
-      { name: 'Deng', lat: 28.523, lng: 84.845, ele: 1860 },
-      { name: 'Rana', lat: 28.527, lng: 84.822, ele: 1980 },
-      { name: 'Ghap', lat: 28.530, lng: 84.803, ele: 2160 },
+      { name: 'Deng', lat: 28.4791, lng: 84.867, ele: 1860 },
+      { name: 'Ghap', lat: 28.5312, lng: 84.8257, ele: 2160 },
     ],
   },
   {
@@ -138,9 +140,9 @@ export const stages: Stage[] = [
       'Climb through forest to the permit checkpoint at Namrung, then on past mani walls to ' +
       'Lihi with its chortens and first big views of Manaslu and the high peaks.',
     waypoints: [
-      { name: 'Ghap', lat: 28.530, lng: 84.803, ele: 2160 },
-      { name: 'Namrung', lat: 28.541, lng: 84.797, ele: 2630 },
-      { name: 'Lihi', lat: 28.552, lng: 84.768, ele: 2920 },
+      { name: 'Ghap', lat: 28.5312, lng: 84.8257, ele: 2160 },
+      { name: 'Namrung', lat: 28.5451, lng: 84.7679, ele: 2630 },
+      { name: 'Lihi', lat: 28.5613, lng: 84.7383, ele: 2920 },
     ],
   },
   {
@@ -159,10 +161,10 @@ export const stages: Stage[] = [
       'Himalchuli, Manaslu and Ngadi Chuli, and on to the Tibetan-style village of ' +
       'Sama Gaun — the acclimatisation hub. Overnight at Shyala or Sama Gaun (decided on the trail).',
     waypoints: [
-      { name: 'Lihi', lat: 28.552, lng: 84.768, ele: 2920 },
-      { name: 'Lho', lat: 28.573, lng: 84.740, ele: 3180 },
-      { name: 'Shyala', lat: 28.590, lng: 84.662, ele: 3500 },
-      { name: 'Sama Gaun', lat: 28.606, lng: 84.629, ele: 3530 },
+      { name: 'Lihi', lat: 28.5613, lng: 84.7383, ele: 2920 },
+      { name: 'Lho', lat: 28.574, lng: 84.702, ele: 3180 },
+      { name: 'Shyala', lat: 28.5742, lng: 84.6726, ele: 3500 },
+      { name: 'Sama Gaun', lat: 28.5847, lng: 84.644, ele: 3530 },
     ],
   },
   {
@@ -179,7 +181,7 @@ export const stages: Stage[] = [
     description:
       'Acclimatisation day. Options: day hike to Manaslu Base Camp (~4,800 m) or the turquoise ' +
       'Birendra Lake and Pungyen Gompa. Climb high, sleep low — do not skip this.',
-    waypoints: [{ name: 'Sama Gaun', lat: 28.606, lng: 84.629, ele: 3530 }],
+    waypoints: [{ name: 'Sama Gaun', lat: 28.5847, lng: 84.644, ele: 3530 }],
   },
   {
     id: 'stage-7',
@@ -196,9 +198,8 @@ export const stages: Stage[] = [
       'A gentle high-valley walk above the tree line, following the Budhi Gandaki toward the ' +
       'Tibet border to Samdo, the last permanent village on the circuit.',
     waypoints: [
-      { name: 'Sama Gaun', lat: 28.606, lng: 84.629, ele: 3530 },
-      { name: 'Kermo Kharka', lat: 28.626, lng: 84.628, ele: 3700 },
-      { name: 'Samdo', lat: 28.640, lng: 84.630, ele: 3860 },
+      { name: 'Sama Gaun', lat: 28.5847, lng: 84.644, ele: 3530 },
+      { name: 'Samdo', lat: 28.6509, lng: 84.6341, ele: 3860 },
     ],
   },
   {
@@ -216,9 +217,8 @@ export const stages: Stage[] = [
       'A short but important day to Dharamsala (Larke Phedi), a basic cluster of stone huts that ' +
       'is the staging camp below the pass. Rest, hydrate and sleep early.',
     waypoints: [
-      { name: 'Samdo', lat: 28.640, lng: 84.630, ele: 3860 },
-      { name: 'Larke Bazaar (ruins)', lat: 28.650, lng: 84.600, ele: 4090 },
-      { name: 'Dharamsala (Larke Phedi)', lat: 28.657, lng: 84.575, ele: 4460 },
+      { name: 'Samdo', lat: 28.6509, lng: 84.6341, ele: 3860 },
+      { name: 'Dharamsala (Larke Phedi)', lat: 28.659, lng: 84.5843, ele: 4460 },
     ],
   },
   {
@@ -236,9 +236,9 @@ export const stages: Stage[] = [
       'The big day. A pre-dawn start up moraine to the prayer-flag-draped Larke La (5,106 m), ' +
       'then a long, knee-testing descent past glaciers to the meadows of Bhimthang.',
     waypoints: [
-      { name: 'Dharamsala (Larke Phedi)', lat: 28.657, lng: 84.575, ele: 4460 },
-      { name: 'Larke La Pass', lat: 28.671, lng: 84.508, ele: 5106 },
-      { name: 'Bhimthang', lat: 28.648, lng: 84.451, ele: 3720 },
+      { name: 'Dharamsala (Larke Phedi)', lat: 28.659, lng: 84.5843, ele: 4460 },
+      { name: 'Larke La Pass', lat: 28.6639, lng: 84.5203, ele: 5106 },
+      { name: 'Bhimthang', lat: 28.6338, lng: 84.4713, ele: 3720 },
     ],
   },
   {
@@ -257,12 +257,10 @@ export const stages: Stage[] = [
       'Karche, Gho and Tilije, then Thonje to Dharapani — joining the Annapurna Circuit and the ' +
       'road head, where jeeps run to Besisahar and on to Kathmandu.',
     waypoints: [
-      { name: 'Bhimthang', lat: 28.648, lng: 84.451, ele: 3720 },
-      { name: 'Karche', lat: 28.598, lng: 84.418, ele: 2785 },
-      { name: 'Gho', lat: 28.575, lng: 84.408, ele: 2515 },
-      { name: 'Tilije', lat: 28.560, lng: 84.400, ele: 2300 },
-      { name: 'Thonje', lat: 28.540, lng: 84.372, ele: 1965 },
-      { name: 'Dharapani', lat: 28.523, lng: 84.362, ele: 1860 },
+      { name: 'Bhimthang', lat: 28.6338, lng: 84.4713, ele: 3720 },
+      { name: 'Gho', lat: 28.5684, lng: 84.4032, ele: 2515 },
+      { name: 'Thonje', lat: 28.5272, lng: 84.3541, ele: 1965 },
+      { name: 'Dharapani', lat: 28.519, lng: 84.3584, ele: 1860 },
     ],
   },
 ];
@@ -304,5 +302,21 @@ export const allWaypoints: Waypoint[] = (() => {
   return out;
 })();
 
-export const totalDistanceKm = stages.reduce((sum, s) => sum + s.distanceKm, 0);
+/**
+ * Measured trail distance for a stage (from the routed OSM geometry), falling back
+ * to the planned estimate. Rest days stay at 0.
+ */
+export function stageDistanceKm(stage: Stage): number {
+  if (stage.distanceKm === 0) return 0;
+  return routeGeometry[stage.id]?.distanceKm ?? stage.distanceKm;
+}
+
+/** Measured ascent / descent for a stage, falling back to the planned estimate. */
+export function stageGains(stage: Stage): { ascentM: number; descentM: number } {
+  const geo = routeGeometry[stage.id];
+  if (stage.distanceKm === 0 || !geo) return { ascentM: stage.ascentM, descentM: stage.descentM };
+  return { ascentM: geo.ascentM, descentM: geo.descentM };
+}
+
+export const totalDistanceKm = stages.reduce((sum, s) => sum + stageDistanceKm(s), 0);
 export const highestPointM = Math.max(...stages.map((s) => s.maxEleM));

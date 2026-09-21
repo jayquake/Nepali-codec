@@ -9,13 +9,15 @@
 //              Falls back to a densified straight waypoint line (e.g. over Larke La,
 //              where the high pass has no routable OSM way).
 //
-//   2. elev  — a smooth elevation profile interpolated from the CURATED waypoint
-//              elevations in trail.ts, weighted by inter-waypoint distance.
-//              We deliberately DO NOT use DEM/SRTM elevation here: in the deep
-//              Budhi Gandaki gorge, 90 m elevation grids read the canyon walls, not
-//              the trail floor (e.g. Jagat, really ~1,340 m, reads ~2,800–3,200 m).
-//              The curated village elevations are guidebook/GPS-accurate, so the
-//              graph is built from those. (Your watch GPX remains the real profile.)
+//   2. elev  — the real SRTM elevation sampled along that trail, giving a dense
+//              profile like Organic Maps / Maps.me shows. Verified against the app:
+//              Ghap -> Lihi returns 10.7 km and 2,115 -> 2,938 m vs the phone's
+//              11 km and 2,085 -> 2,920 m.
+//              NOTE: this only works because the waypoint coordinates in trail.ts are
+//              the authoritative OSM ones. Earlier, hand-guessed coordinates (Jagat
+//              was ~11 km out) snapped onto canyon walls and produced garbage
+//              elevations; if you add a waypoint, look it up rather than estimating.
+//              Falls back to interpolating the curated village elevations.
 //
 // Run:  node scripts/build-route.mjs
 // Re-run whenever the waypoints in src/data/trail.ts change.
@@ -48,6 +50,18 @@ function pathStraightKm(waypoints) {
   let d = 0;
   for (let i = 1; i < waypoints.length; i++) d += havKm(waypoints[i - 1], waypoints[i]);
   return d;
+}
+
+/** Ascent / descent from a resampled profile (raw SRTM is too noisy to sum directly). */
+function gains(elev) {
+  let up = 0;
+  let down = 0;
+  for (let i = 1; i < elev.length; i++) {
+    const d = elev[i] - elev[i - 1];
+    if (d > 0) up += d;
+    else down -= d;
+  }
+  return { ascentM: Math.round(up), descentM: Math.round(down) };
 }
 
 /** Extract stages (id + ordered waypoints) from the trail.ts source. */
@@ -104,9 +118,9 @@ async function brouter(waypoints) {
       `implausible length ${(lengthM / 1000).toFixed(1)} km vs ${straightKm.toFixed(1)} km straight`,
     );
   }
-  // Horizontal geometry only (elevation from these coords is unreliable in the gorge).
   const line = coords.map((c) => [c[1], c[0]]); // [lon,lat,ele] -> [lat, lng]
-  return { line, lengthM, source: 'brouter' };
+  const elev = coords.map((c) => c[2] ?? 0); // SRTM along the trail
+  return { line, elev, lengthM, source: 'brouter' };
 }
 
 /**
@@ -188,16 +202,24 @@ async function main() {
 
     // Map line: keep it detailed but capped for bundle size.
     const line = resample(data.line, Math.min(data.line.length, 120));
-    const lengthKm = data.lengthM ? data.lengthM / 1000 : null;
-    // Elevation graph from curated village elevations — ~1 sample per 500 m of trail.
-    const k = Math.min(48, Math.max(12, Math.round((lengthKm || pathStraightKm(stage.waypoints)) * 2)));
-    const elev = interpProfile(stage.waypoints, k);
+    const lengthKm = data.lengthM ? data.lengthM / 1000 : pathStraightKm(stage.waypoints);
+    // Elevation graph: ~1 sample per 300 m of trail (smooths SRTM noise, keeps relief).
+    const k = Math.min(72, Math.max(16, Math.round(lengthKm * 3.3)));
+    const elev =
+      data.elev && data.elev.length > 2
+        ? resample(data.elev, Math.min(data.elev.length, k)).map((n) => Math.round(n))
+        : interpProfile(stage.waypoints, k);
+    const { ascentM, descentM } = gains(elev);
 
     result[stage.id] = {
       line: line.map(([a, b]) => [Number(a.toFixed(5)), Number(b.toFixed(5))]),
       elev,
-      distanceKm: lengthKm ? Number(lengthKm.toFixed(1)) : null,
-      lineSource: data.source,
+      distanceKm: Number(lengthKm.toFixed(1)),
+      ascentM,
+      descentM,
+      maxEleM: Math.max(...elev),
+      minEleM: Math.min(...elev),
+      source: data.source,
     };
 
     if (data.source === 'brouter') await sleep(1500); // be polite to the public server
@@ -210,12 +232,17 @@ async function main() {
 export interface StageGeom {
   /** Trail-snapped route polyline (OSM foot paths), [lat, lng] pairs. */
   line: [number, number][];
-  /** Elevation profile (metres) for the stage graph, from curated village elevations. */
+  /** Elevation profile (metres) sampled along the real trail. */
   elev: number[];
-  /** Real trail distance in km from routing (null when the straight fallback was used). */
-  distanceKm: number | null;
-  /** 'brouter' = OSM trail-snapped line, 'waypoints' = straight fallback (e.g. Larke La). */
-  lineSource: 'brouter' | 'waypoints';
+  /** Real trail distance in km. */
+  distanceKm: number;
+  /** Cumulative ascent / descent along the trail, metres. */
+  ascentM: number;
+  descentM: number;
+  maxEleM: number;
+  minEleM: number;
+  /** 'brouter' = OSM trail-snapped + SRTM, 'waypoints' = straight-line fallback. */
+  source: 'brouter' | 'waypoints';
 }
 
 export const routeGeometry: Record<string, StageGeom> = ${JSON.stringify(result, null, 2)};

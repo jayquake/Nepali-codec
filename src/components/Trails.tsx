@@ -5,6 +5,8 @@ import {
   PERMITS,
   TREK_SUMMARY,
   highestPointM,
+  stageDistanceKm,
+  stageGains,
   stages,
   totalDistanceKm,
 } from '../data/trail';
@@ -21,7 +23,7 @@ export function Trails({
 }) {
   const distanceDone = stages
     .filter((s) => progress.isDone(s.id))
-    .reduce((sum, s) => sum + s.distanceKm, 0);
+    .reduce((sum, s) => sum + stageDistanceKm(s), 0);
 
   return (
     <div className="view">
@@ -110,14 +112,14 @@ export function Trails({
             <div className="stage__meta">
               {!isRest && (
                 <span>
-                  <b>{stage.distanceKm} km</b> dist
+                  <b>{stageDistanceKm(stage)} km</b> dist
                 </span>
               )}
               <span>
-                <b>↑{stage.ascentM}</b> m
+                <b>↑{stageGains(stage).ascentM}</b> m
               </span>
               <span>
-                <b>↓{stage.descentM}</b> m
+                <b>↓{stageGains(stage).descentM}</b> m
               </span>
               <span>
                 max <b>{stage.maxEleM.toLocaleString()} m</b>
