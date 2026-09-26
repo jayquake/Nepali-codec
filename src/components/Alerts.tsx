@@ -2,8 +2,71 @@ import { useState } from 'react';
 import { alerts, type AlertLevel, type SavedArticle } from '../data/alerts';
 import { EXIT_AS_OF, exitRoutes, roadStatus, stuckChecklist } from '../data/exitRoutes';
 import { FLIGHTS_FETCHED, flightRoutes, rebookingNotes } from '../data/flights';
+import {
+  EMERGENCY_AS_OF,
+  emergencyContacts,
+  evacuationSteps,
+  insuranceNotes,
+  yourLocation,
+} from '../data/emergency';
+import { emailTemplates, type EmailTemplate } from '../data/emailTemplates';
 
-type Section = 'alerts' | 'exit' | 'flights';
+type Section = 'alerts' | 'exit' | 'sos' | 'flights';
+
+/** Copy button that degrades gracefully when the clipboard API is unavailable. */
+function CopyBtn({ text, label = 'Copy' }: { text: string; label?: string }) {
+  const [done, setDone] = useState(false);
+  return (
+    <button
+      className="btn btn--sm btn--primary"
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); } catch { /* nothing else to try */ }
+          document.body.removeChild(ta);
+        }
+        setDone(true);
+        setTimeout(() => setDone(false), 1800);
+      }}
+    >
+      {done ? '✓ Copied' : `📋 ${label}`}
+    </button>
+  );
+}
+
+function TemplateCard({ t }: { t: EmailTemplate }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="card">
+      <div className="card__title">{t.title}</div>
+      <p className="small" style={{ marginTop: 0 }}>{t.blurb}</p>
+      <div className="small muted" style={{ marginBottom: 2 }}>To: <b>{t.to}</b></div>
+      <div className="small muted" style={{ marginBottom: 8 }}>Subject: {t.subject}</div>
+      <div className="row" style={{ flexWrap: 'wrap' }}>
+        <CopyBtn text={t.body} label="Copy email" />
+        <a
+          className="btn btn--sm"
+          href={`mailto:${t.to}?subject=${encodeURIComponent(t.subject)}&body=${encodeURIComponent(t.body)}`}
+        >
+          ✉️ Open in mail
+        </a>
+        <button className="btn btn--sm btn--ghost" onClick={() => setOpen((o) => !o)}>
+          {open ? 'Hide text' : 'Show text'}
+        </button>
+      </div>
+      {open && <pre className="tmpl">{t.body}</pre>}
+      <div className="section-title" style={{ marginTop: 10 }}>Before you send</div>
+      <ul className="small" style={{ paddingLeft: 18, margin: 0 }}>
+        {t.tips.map((x, i) => <li key={i} style={{ marginBottom: 5 }}>{x}</li>)}
+      </ul>
+    </div>
+  );
+}
 
 const levelClass: Record<AlertLevel, string> = {
   critical: 'lvl lvl--critical',
@@ -43,6 +106,9 @@ export function Alerts() {
         </button>
         <button className={`seg${section === 'exit' ? ' seg--active' : ''}`} onClick={() => setSection('exit')}>
           🛣️ Get out
+        </button>
+        <button className={`seg${section === 'sos' ? ' seg--active' : ''}`} onClick={() => setSection('sos')}>
+          🆘 SOS
         </button>
         <button className={`seg${section === 'flights' ? ' seg--active' : ''}`} onClick={() => setSection('flights')}>
           ✈️ Flights
@@ -130,6 +196,74 @@ export function Alerts() {
         </>
       )}
 
+      {section === 'sos' && (
+        <>
+          <div className="banner banner--warn">
+            🚁 Medical emergency: start descending, then call PassportCard and open a case
+            BEFORE a helicopter is arranged — that is what gets it paid for.
+          </div>
+
+          <div className="section-title">Your location (they will ask)</div>
+          <div className="card">
+            <div className="spread" style={{ padding: '4px 0' }}>
+              <span className="small muted">Place</span><b className="small">{yourLocation.place}</b>
+            </div>
+            <div className="spread" style={{ padding: '4px 0' }}>
+              <span className="small muted">Coordinates</span><b className="small">{yourLocation.coords}</b>
+            </div>
+            <div className="spread" style={{ padding: '4px 0' }}>
+              <span className="small muted">Elevation</span><b className="small">{yourLocation.elevation}</b>
+            </div>
+            <div className="row" style={{ marginTop: 8 }}>
+              <CopyBtn
+                text={`${yourLocation.place} — ${yourLocation.coords}, ${yourLocation.elevation}`}
+                label="Copy location"
+              />
+            </div>
+          </div>
+
+          <div className="section-title">Contacts · verified {fmt(EMERGENCY_AS_OF)}</div>
+          {emergencyContacts.map((c) => (
+            <div key={c.id} className={`card${c.priority ? ' card--hot' : ''}`}>
+              <div className="card__title">{c.name}</div>
+              <p className="small" style={{ marginTop: 0 }}>{c.detail}</p>
+              {c.numbers.map((n) => (
+                <a key={n.value} className="tel-row" href={`tel:${n.value.replace(/[^+\d*]/g, '')}`}>
+                  <span className="small muted">{n.label}</span>
+                  <b>{n.value}</b>
+                </a>
+              ))}
+              {c.email && (
+                <a className="tel-row" href={`mailto:${c.email}`}>
+                  <span className="small muted">Email</span>
+                  <b>{c.email}</b>
+                </a>
+              )}
+              {c.note && <div className="small muted" style={{ marginTop: 6 }}>{c.note}</div>}
+            </div>
+          ))}
+
+          <div className="section-title">Getting a helicopter — in order</div>
+          <div className="card">
+            <ul className="small" style={{ paddingLeft: 18, margin: 0, listStyle: 'none' }}>
+              {evacuationSteps.map((s2, i) => <li key={i} style={{ marginBottom: 7 }}>{s2}</li>)}
+            </ul>
+          </div>
+
+          <div className="section-title">PassportCard — how it actually works</div>
+          <div className="card">
+            <ul className="small" style={{ paddingLeft: 18, margin: 0 }}>
+              {insuranceNotes.map((n, i) => <li key={i} style={{ marginBottom: 6 }}>{n}</li>)}
+            </ul>
+          </div>
+
+          <div className="section-title">Ready-to-send email</div>
+          {emailTemplates.filter((t) => t.id === 'passportcard-claim').map((t) => (
+            <TemplateCard key={t.id} t={t} />
+          ))}
+        </>
+      )}
+
       {section === 'flights' && (
         <>
           <div className="banner banner--warn">
@@ -142,6 +276,11 @@ export function Alerts() {
               {rebookingNotes.map((n, i) => <li key={i} style={{ marginBottom: 6 }}>{n}</li>)}
             </ul>
           </div>
+
+          <div className="section-title">Ready-to-send email</div>
+          {emailTemplates.filter((t) => t.id === 'flydubai-rebook').map((t) => (
+            <TemplateCard key={t.id} t={t} />
+          ))}
 
           {flightRoutes.map((route) => (
             <div key={route.id}>
