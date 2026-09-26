@@ -15,6 +15,14 @@ function fullDay(dateStr: string): string {
   });
 }
 
+/** Time alone is misleading for a stale reading — show the date once it is not today. */
+function fmtUpdated(at: number) {
+  const d = new Date(at);
+  const time = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const sameDay = d.toDateString() === new Date().toDateString();
+  return sameDay ? time : `${d.toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}, ${time}`;
+}
+
 export function Conditions() {
   const { data, loading, error, updatedAt, reload } = useWeather(weatherPoints);
   const [detail, setDetail] = useState<WeatherPoint | null>(null);
@@ -25,9 +33,7 @@ export function Conditions() {
         <div>
           <div style={{ fontWeight: 700, fontSize: 16 }}>Trail conditions</div>
           <div className="small muted">
-            {updatedAt
-              ? `Updated ${new Date(updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
-              : 'Live forecast · Open-Meteo'}
+            {updatedAt ? `Updated ${fmtUpdated(updatedAt)}` : 'Live forecast · Open-Meteo'}
           </div>
         </div>
         <button className="btn btn--sm" onClick={reload} disabled={loading}>
@@ -37,8 +43,10 @@ export function Conditions() {
 
       {error && (
         <div className="banner banner--warn">
-          Couldn’t refresh weather ({error}). Showing the last saved forecast if available — the
-          app caches it for offline use on the trail.
+          {/* Offline messages already read as full sentences; only wrap real errors. */}
+          {error.startsWith('Offline')
+            ? error
+            : `Couldn’t refresh weather (${error}). Showing the last forecast saved on this device.`}
         </div>
       )}
 

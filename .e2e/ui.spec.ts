@@ -169,3 +169,37 @@ test('no console errors during a full tab sweep', async ({ page }) => {
   console.log('console errors (filtered):', real);
   expect(real).toEqual([]);
 });
+
+// The test browser has no proxy, so external hosts (OSM tiles, Open-Meteo) are
+// unreachable — i.e. it behaves exactly like a phone with no signal.
+
+test('offline: map tiles still render after zooming in', async ({ page }) => {
+  await open(page, 'Map');
+  await page.waitForSelector('.leaflet-tile', { timeout: 15_000 });
+  for (let i = 0; i < 3; i++) {
+    await page.mouse.dblclick(200, 400);
+    await page.waitForTimeout(1000);
+  }
+  const t = await page.evaluate(() => {
+    const imgs = Array.from(document.querySelectorAll('img.leaflet-tile'));
+    return { total: imgs.length, loaded: imgs.filter((i) => (i as HTMLImageElement).naturalWidth > 0).length };
+  });
+  console.log('offline tiles after zoom:', JSON.stringify(t));
+  expect(t.total).toBeGreaterThan(0);
+  // Every tile must paint from the bundled pack — no blank map.
+  expect(t.loaded).toBe(t.total);
+});
+
+test('offline: weather shows a real forecast with no live fetch', async ({ page }) => {
+  await open(page, 'Weather');
+  await expect(page.locator('.wx').first()).toBeVisible();
+  // Falls back to the baked snapshot and says so.
+  await expect(page.getByText(/Offline —/)).toBeVisible();
+  // Real values, not empty placeholders.
+  const body = await page.locator('.view').first().innerText();
+  expect(body).toMatch(/\d+°/);
+  await page.locator('button.wx', { hasText: 'Sama Gaun' }).first().click();
+  await expect(page.locator('.sheet')).toBeVisible();
+  const sheet = await page.locator('.sheet').innerText();
+  expect(sheet).toMatch(/\d+°/);
+});

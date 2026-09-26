@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { WeatherPoint } from '../data/weatherPoints';
 import { loadJSON, saveJSON } from '../lib/storage';
+import { SNAPSHOT_AT, weatherSnapshot } from '../data/weatherSnapshot.generated';
 
 // Last good forecast is mirrored to localStorage so a refresh with no signal
 // still shows real data (with an "as of" time) instead of an empty tab.
@@ -82,7 +83,10 @@ export interface WeatherState {
  * last-known forecast still shows offline.
  */
 export function useWeather(points: WeatherPoint[]): WeatherState {
-  const [data, setData] = useState<Record<string, PointWeather>>({});
+  const [data, setData] = useState<Record<string, PointWeather>>(() => {
+    const cached = loadJSON<WxCache | null>(WX_CACHE, null);
+    return cached?.data && Object.keys(cached.data).length ? cached.data : weatherSnapshot;
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [updatedAt, setUpdatedAt] = useState<number | null>(null);
@@ -114,12 +118,19 @@ export function useWeather(points: WeatherPoint[]): WeatherState {
     } catch (e) {
       // Offline or the service is unreachable: fall back to the last good forecast.
       const cached = loadJSON<WxCache | null>(WX_CACHE, null);
-      if (cached?.data) {
+      if (cached?.data && Object.keys(cached.data).length) {
         setData(cached.data);
         setUpdatedAt(cached.at);
         setError('Offline — showing the last forecast saved on this device.');
       } else {
-        setError(e instanceof Error ? e.message : 'Could not load weather.');
+        // Never fetched on this device: fall back to the forecast baked into the
+        // app at build time, clearly labelled with when it was captured.
+        setData(weatherSnapshot);
+        setUpdatedAt(Date.parse(SNAPSHOT_AT));
+        setError(
+          `Offline — no forecast saved yet, showing the one built into the app on ` +
+            `${new Date(SNAPSHOT_AT).toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}.`,
+        );
       }
     } finally {
       setLoading(false);

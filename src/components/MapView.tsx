@@ -8,6 +8,10 @@ import { allWaypoints, routeLine } from '../data/trail';
 import { lodges } from '../data/lodges';
 import { trackColor } from '../lib/colors';
 
+/** 1x1 transparent PNG — used so a failed tile reveals the layer beneath. */
+const BLANK_TILE =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
 const lodgeIcon = L.divIcon({
   className: 'lodge-pin',
   html: '<div class="lodge-pin__d">🛏️</div>',
@@ -107,14 +111,28 @@ export function MapView({
         zoomControl={false}
         scrollWheelZoom
       >
+        {/* Offline base: tile pack shipped with the app (scripts/fetch-tiles.mjs) and
+            precached by the service worker. Sits UNDER the live layer, so when OSM
+            tiles fail with no signal this still draws instead of going blank.
+            maxNativeZoom lets Leaflet upscale past z12 rather than showing nothing. */}
+        <TileLayer
+          url={`${import.meta.env.BASE_URL}tiles/{z}/{x}/{y}.png`}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          minZoom={7}
+          maxNativeZoom={12}
+          maxZoom={17}
+          errorTileUrl={BLANK_TILE}
+        />
+        {/* Live tiles on top for full detail and coverage when there is signal. */}
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution=""
           maxZoom={17}
-          // Keep showing (upscaled) cached tiles instead of blank tiles past the
-          // deepest zoom OSM serves — otherwise the map goes black offline.
           maxNativeZoom={17}
           keepBuffer={4}
+          // A failed live tile must be transparent, not blank, so the offline
+          // layer underneath shows through.
+          errorTileUrl={BLANK_TILE}
         />
         <FitRoute />
         <FlyToFocus focus={focus} />

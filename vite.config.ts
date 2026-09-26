@@ -35,7 +35,10 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,woff2}'],
+        // png included so the offline tile pack in public/tiles is precached.
+        globPatterns: ['**/*.{js,css,html,svg,woff2,png}'],
+        // The tile pack pushes the precache past the 2 MiB default.
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         navigateFallbackDenylist: [/^\/track\//],
         runtimeCaching: [
           {
