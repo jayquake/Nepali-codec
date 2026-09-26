@@ -155,6 +155,11 @@ export function Plan() {
                       <input type="checkbox" checked={done} onChange={() => it.toggleDone(day.id)} />
                     </label>
                   </div>
+                  {day.provisional && (
+                    <span className="lvl lvl--warning" style={{ marginBottom: 4 }}>
+                      Provisional
+                    </span>
+                  )}
                   <div className="itin__detail">{day.detail}</div>
                   <input
                     className="itin__note"

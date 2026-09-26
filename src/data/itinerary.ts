@@ -1,6 +1,9 @@
 // Day-by-day trip plan with the ACTUAL dates for this trip (Sep–Oct 2026).
-// Source: the group's dated schedule. Updated on the trail (extra night at Ghap
-// between Deng and Namrung, shifting later days by one). Edit here if plans change.
+// Source: the group's dated schedule, kept in step with what actually happened on
+// the trail: an extra night at Ghap, Ghap -> Lihi, a night at Shyala, then Sama Gaun
+// from 24 Sep with a weather hold while the late-September storm passes.
+// Days from 27 Sep are marked provisional: Larke La is closed to trekkers and the
+// road beyond Dharapani is blocked (see src/data/alerts.ts).
 
 export type DayKind = 'fly' | 'city' | 'travel' | 'trek' | 'rest' | 'pass';
 
@@ -11,6 +14,8 @@ export interface ItineraryDay {
   title: string;
   detail: string;
   kind: DayKind;
+  /** Plans past the weather hold — not yet possible to commit to. */
+  provisional?: boolean;
 }
 
 export const itinerary: ItineraryDay[] = [
@@ -78,14 +83,23 @@ export const itinerary: ItineraryDay[] = [
     id: 'd-t4',
     date: '2026-09-23',
     icon: '🥾',
-    title: 'Lihi → Shyala / Sama Gaun',
+    title: 'Lihi → Shyala',
     detail:
-      'Through Sho and Lho (Ribung Gompa) to Shyala (~3,500 m) or on to Sama Gaun / Samagaon (~3,530 m), the acclimatisation hub. (Overnight TBD on the trail.)',
+      'Through Sho and Lho (Ribung Gompa) to Shyala (~3,500 m), ringed by Himalchuli, Manaslu and Ngadi Chuli. Night at Shyala.',
+    kind: 'trek',
+  },
+  {
+    id: 'd-shyala-sama',
+    date: '2026-09-24',
+    icon: '🥾',
+    title: 'Shyala → Sama Gaun',
+    detail:
+      'Short walk up the valley to Sama Gaun / Samagaon (~3,530 m), the big Tibetan-style village that is the acclimatisation hub.',
     kind: 'trek',
   },
   {
     id: 'd-accl',
-    date: '2026-09-24',
+    date: '2026-09-25',
     icon: '🧗',
     title: 'Acclimatisation — Sama Gaun',
     detail:
@@ -93,60 +107,80 @@ export const itinerary: ItineraryDay[] = [
     kind: 'rest',
   },
   {
+    id: 'd-hold',
+    date: '2026-09-26',
+    icon: '🌧️',
+    title: 'Sama Gaun — weather hold',
+    detail:
+      'Storm. Heavy rain and snow above; authorities suspended high-altitude trekking and told trekkers to stay low and safe. Sitting it out in Sama Gaun — lodges, food, and the right altitude to wait at. See the Alerts tab.',
+    kind: 'rest',
+  },
+  {
     id: 'd-t6',
-    date: '2026-09-25',
+    date: '2026-09-27',
     icon: '🥾',
     title: 'Sama Gaun → Samdo',
-    detail: 'Gentle high-valley walk to Samdo (~3,860 m), the last permanent village.',
+    detail:
+      'Gentle high-valley walk to Samdo (~3,860 m), the last permanent village. Only once the weather warning lifts.',
     kind: 'trek',
+    provisional: true,
   },
   {
     id: 'd-t7',
-    date: '2026-09-26',
+    date: '2026-09-28',
     icon: '🥾',
     title: 'Samdo → Dharamsala',
     detail: 'Short climb to Dharamsala / Larke Phedi (~4,460 m). Rest early for the pass.',
     kind: 'trek',
+    provisional: true,
   },
   {
     id: 'd-pass',
-    date: '2026-09-27',
+    date: '2026-09-29',
     icon: '🏔️',
     title: 'Dharamsala → Larkya La → Bhimthang',
     detail:
-      'THE BIG DAY. Pre-dawn start over Larkya La (5,106 m), then a long descent to Bhimthang (~3,720 m). 8–10 h.',
+      'THE BIG DAY. Pre-dawn start over Larkya La (5,106 m), then a long descent to Bhimthang (~3,720 m). 8–10 h. NOTE: trekking to Bhimthang was banned by the Manang administration during the storm and fresh snow is lying on the pass — confirm it has reopened before committing.',
     kind: 'pass',
+    provisional: true,
   },
   {
     id: 'd-t8',
-    date: '2026-09-28',
+    date: '2026-09-30',
     icon: '🥾',
     title: 'Bhimthang → Dharapani',
     detail: 'Long descent through forest via Karche/Gho/Tilije to Dharapani (~1,860 m), joining the Annapurna Circuit.',
     kind: 'trek',
+    provisional: true,
   },
   {
     id: 'd-drive-out',
-    date: '2026-09-29',
+    date: '2026-10-01',
     icon: '🚙',
     title: 'Dharapani → Kathmandu',
-    detail: 'Jeep out via Besisahar back to Kathmandu.',
+    detail:
+      'Jeep out via Besisahar back to Kathmandu. NOTE: the Chame–Besisahar road was completely blocked by flood and landslide — check before relying on this.',
     kind: 'travel',
+    provisional: true,
   },
   {
     id: 'd-buffer',
-    date: '2026-09-30',
+    date: '2026-10-02',
     icon: '🏙️',
-    title: 'Kathmandu — buffer / rest',
-    detail: '30 Sep–2 Oct: contingency + celebration. Rest, souvenirs, repack. A nicer hotel post-trek.',
+    title: 'Kathmandu — buffer / repack',
+    detail:
+      'The buffer is down to a single day now. Rest, repack, sort the flight home. Any further delay on the trail eats into the 3 Oct departure.',
     kind: 'city',
+    provisional: true,
   },
   {
     id: 'd-fly-home',
     date: '2026-10-03',
     icon: '✈️',
     title: 'Fly home',
-    detail: 'Departure from Kathmandu. Reconfirm the flight and airport transfer the day before.',
+    detail:
+      'Departure from Kathmandu. The DXB→TLV leg was cancelled — see the Alerts tab for 4 Oct replacements and the rebooking email.',
     kind: 'fly',
+    provisional: true,
   },
 ];

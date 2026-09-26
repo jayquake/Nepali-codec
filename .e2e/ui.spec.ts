@@ -32,12 +32,12 @@ test('app shell + all nav tabs render', async ({ page }) => {
   }
 });
 
-test('Trails: 10 stages, real dates, measured distances', async ({ page }) => {
+test('Trails: 11 stages, real dates, measured distances', async ({ page }) => {
   await open(page, 'Trails');
 
   // One card per walking stage + the acclimatisation day.
   const stages = page.locator('.stage');
-  await expect(stages).toHaveCount(10);
+  await expect(stages).toHaveCount(11);
 
   // The on-trail itinerary change and its measured distance.
   const ghapLihi = page.locator('.stage', { hasText: 'Ghap → Lihi' });
@@ -48,7 +48,8 @@ test('Trails: 10 stages, real dates, measured distances', async ({ page }) => {
   await expect(ghapLihi).toContainText('end 2,920 m');
 
   // Flexible overnight stage.
-  await expect(page.locator('.stage', { hasText: 'Lihi → Shyala / Sama Gaun' })).toBeVisible();
+  await expect(page.locator('.stage', { hasText: 'Lihi → Shyala' }).first()).toBeVisible();
+  await expect(page.locator('.stage', { hasText: 'Shyala → Sama Gaun' })).toBeVisible();
   // Rest day has no distance chip but is present.
   await expect(page.locator('.stage', { hasText: 'Sama Gaun (acclimatisation)' })).toBeVisible();
   // Pass day.
@@ -63,7 +64,7 @@ test('Trails: elevation graphs are dense real profiles, not straight ramps', asy
 
   const sparks = page.locator('.stage svg.spark polyline');
   const count = await sparks.count();
-  expect(count).toBeGreaterThanOrEqual(9); // one per walking stage
+  expect(count).toBeGreaterThanOrEqual(10); // one per walking stage
 
   // Every profile should have many points (real SRTM sampling), not 3-4 waypoints.
   const pointCounts: number[] = [];
