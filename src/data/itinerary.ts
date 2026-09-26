@@ -148,8 +148,9 @@ export const itinerary: ItineraryDay[] = [
     id: 'd-t8',
     date: '2026-09-30',
     icon: '🥾',
-    title: 'Bhimthang → Dharapani',
-    detail: 'Long descent through forest via Karche/Gho/Tilije to Dharapani (~1,860 m), joining the Annapurna Circuit.',
+    title: 'Bhimthang → Tilije',
+    detail:
+      'Long descent through forest along the Dudh Khola via Karche and Gho to the Gurung village of Tilije (~2,300 m) — apple orchards and much thicker air.',
     kind: 'trek',
     provisional: true,
   },
@@ -157,9 +158,9 @@ export const itinerary: ItineraryDay[] = [
     id: 'd-drive-out',
     date: '2026-10-01',
     icon: '🚙',
-    title: 'Dharapani → Kathmandu',
+    title: 'Tilije → Dharapani → Kathmandu',
     detail:
-      'Jeep out via Besisahar back to Kathmandu. NOTE: the Chame–Besisahar road was completely blocked by flood and landslide — check before relying on this.',
+      'Short walk via Thonje to the road head at Dharapani (~2–3 h), then jeep out via Besisahar to Kathmandu. NOTE: the Chame–Besisahar road was completely blocked by flood and landslide — check before relying on this.',
     kind: 'travel',
     provisional: true,
   },

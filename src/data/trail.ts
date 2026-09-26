@@ -263,19 +263,37 @@ export const stages: Stage[] = [
     day: 11,
     date: '2026-09-30',
     from: 'Bhimthang',
-    to: 'Dharapani',
-    distanceKm: 25,
+    to: 'Tilije',
+    distanceKm: 17,
     ascentM: 120,
-    descentM: 1980,
+    descentM: 1540,
     maxEleM: 3720,
-    hours: '7–8 h',
+    hours: '6–7 h',
     description:
-      'The final walk: down through rhododendron and pine forest along the Dudh Khola past ' +
-      'Karche, Gho and Tilije, then Thonje to Dharapani — joining the Annapurna Circuit and the ' +
-      'road head, where jeeps run to Besisahar and on to Kathmandu.',
+      'Down through rhododendron and pine forest along the Dudh Khola, past Karche and Gho, to ' +
+      'the Gurung village of Tilije with its apple orchards and much warmer, thicker air.',
     waypoints: [
       { name: 'Bhimthang', lat: 28.6338, lng: 84.4713, ele: 3720 },
       { name: 'Gho', lat: 28.5684, lng: 84.4032, ele: 2515 },
+      { name: 'Tilije', lat: 28.5452, lng: 84.3812, ele: 2300 },
+    ],
+  },
+  {
+    id: 'stage-12',
+    day: 12,
+    date: '2026-10-01',
+    from: 'Tilije',
+    to: 'Dharapani',
+    distanceKm: 8,
+    ascentM: 120,
+    descentM: 560,
+    maxEleM: 2300,
+    hours: '2–3 h',
+    description:
+      'A short final walk via Thonje to Dharapani, joining the Annapurna Circuit at the road head. ' +
+      'Jeeps run from here to Besisahar and on to Kathmandu.',
+    waypoints: [
+      { name: 'Tilije', lat: 28.5452, lng: 84.3812, ele: 2300 },
       { name: 'Thonje', lat: 28.5272, lng: 84.3541, ele: 1965 },
       { name: 'Dharapani', lat: 28.519, lng: 84.3584, ele: 1860 },
     ],
