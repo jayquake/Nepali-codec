@@ -6,6 +6,9 @@ import { useProgress } from './hooks/useProgress';
 import { useTracks } from './hooks/useTracks';
 import { useLiveLocation } from './hooks/useLiveLocation';
 import { Nav, type ViewName } from './components/Nav';
+import { Alerts } from './components/Alerts';
+import { Confetti } from './components/Confetti';
+import { alerts } from './data/alerts';
 import { MapView } from './components/MapView';
 import { Trails } from './components/Trails';
 import { Conditions } from './components/Conditions';
@@ -91,6 +94,20 @@ export function App() {
         </div>
       </header>
 
+      {alerts[0] && (
+        <button
+          className={`alert-strip alert-strip--${alerts[0].level}`}
+          onClick={() => navigate('alerts')}
+          aria-label="Open travel alerts"
+        >
+          <span className="alert-strip__tag">
+            {alerts[0].level === 'critical' ? '🚨' : '⚠️'}
+          </span>
+          <span className="alert-strip__text">{alerts[0].headline}</span>
+          <span className="alert-strip__go">View ›</span>
+        </button>
+      )}
+
       {showAccount && (
         <Account
           auth={auth}
@@ -123,8 +140,10 @@ export function App() {
         {view === 'tracks' && <Tracks tracks={tracks} onShowOnMap={focusOnMap} />}
         {view === 'checklist' && <Checklist />}
         {view === 'plan' && <Plan />}
+        {view === 'alerts' && <Alerts />}
       </main>
 
+      <Confetti trigger={progress.celebrate} />
       <Nav active={view} onNavigate={navigate} />
     </div>
   );

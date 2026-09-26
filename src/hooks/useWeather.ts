@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { WeatherPoint } from '../data/weatherPoints';
+import { loadJSON, saveJSON } from '../lib/storage';
+
+// Last good forecast is mirrored to localStorage so a refresh with no signal
+// still shows real data (with an "as of" time) instead of an empty tab.
+const WX_CACHE = 'manaslu.weather.v1';
+interface WxCache { data: Record<string, PointWeather>; at: number }
 
 export interface DailyForecast {
   date: string;
@@ -102,9 +108,19 @@ export function useWeather(points: WeatherPoint[]): WeatherState {
         map[p.id] = normalize(arr[i]);
       });
       setData(map);
-      setUpdatedAt(Date.now());
+      const at = Date.now();
+      setUpdatedAt(at);
+      saveJSON(WX_CACHE, { data: map, at } satisfies WxCache);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not load weather.');
+      // Offline or the service is unreachable: fall back to the last good forecast.
+      const cached = loadJSON<WxCache | null>(WX_CACHE, null);
+      if (cached?.data) {
+        setData(cached.data);
+        setUpdatedAt(cached.at);
+        setError('Offline — showing the last forecast saved on this device.');
+      } else {
+        setError(e instanceof Error ? e.message : 'Could not load weather.');
+      }
     } finally {
       setLoading(false);
     }

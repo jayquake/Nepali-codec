@@ -7,9 +7,11 @@ export type ViewName =
   | 'news'
   | 'journal'
   | 'tracks'
-  | 'checklist';
+  | 'checklist'
+  | 'alerts';
 
 const ITEMS: { name: ViewName; icon: string; label: string }[] = [
+  { name: 'alerts', icon: '🚨', label: 'Alerts' },
   { name: 'map', icon: '🗺️', label: 'Map' },
   { name: 'trails', icon: '🥾', label: 'Trails' },
   { name: 'plan', icon: '📅', label: 'Plan' },

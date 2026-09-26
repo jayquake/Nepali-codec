@@ -10,6 +10,8 @@ export interface ProgressState {
   isDone: (stageId: string) => boolean;
   toggle: (stageId: string) => void;
   doneCount: number;
+  /** Increments each time a stage is newly completed — drives the confetti. */
+  celebrate: number;
 }
 
 /**
@@ -18,6 +20,7 @@ export interface ProgressState {
  */
 export function useProgress(user: User | null): ProgressState {
   const [done, setDone] = useState<Record<string, boolean>>(() => loadJSON(KEY, {}));
+  const [celebrate, setCelebrate] = useState(0);
 
   useEffect(() => {
     saveJSON(KEY, done);
@@ -51,6 +54,7 @@ export function useProgress(user: User | null): ProgressState {
   const toggle = useCallback(
     (stageId: string) => {
       setDone((prev) => {
+        if (!prev[stageId]) setCelebrate((n) => n + 1);
         const next = { ...prev };
         const nowDone = !prev[stageId];
         if (nowDone) next[stageId] = true;
@@ -72,5 +76,5 @@ export function useProgress(user: User | null): ProgressState {
   const doneCount = Object.values(done).filter(Boolean).length;
   const isDone = useCallback((stageId: string) => Boolean(done[stageId]), [done]);
 
-  return { done, isDone, toggle, doneCount };
+  return { done, isDone, toggle, doneCount, celebrate };
 }

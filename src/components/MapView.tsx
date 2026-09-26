@@ -99,11 +99,22 @@ export function MapView({
 
   return (
     <div className="map-view">
-      <MapContainer center={[28.6, 84.63]} zoom={10} zoomControl={false} scrollWheelZoom>
+      <MapContainer
+        center={[28.6, 84.63]}
+        zoom={10}
+        minZoom={7}
+        maxZoom={17}
+        zoomControl={false}
+        scrollWheelZoom
+      >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           maxZoom={17}
+          // Keep showing (upscaled) cached tiles instead of blank tiles past the
+          // deepest zoom OSM serves — otherwise the map goes black offline.
+          maxNativeZoom={17}
+          keepBuffer={4}
         />
         <FitRoute />
         <FlyToFocus focus={focus} />
