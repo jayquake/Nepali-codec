@@ -23,17 +23,17 @@ export const EXIT_AS_OF = '2026-09-26';
 export const exitRoutes: ExitRoute[] = [
   {
     id: 'exit-larke',
-    name: 'Forward over Larke La → Bhimthang → Tilje → Dharapani',
+    name: 'Forward over Larke La → Bhimthang → Tilije (road head)',
     status: 'blocked',
     statusNote:
-      'Manang district BANNED high-altitude trekking Fri–Sun, explicitly naming Bhimthang. The Chame–Besisahar road beyond Dharapani is also completely blocked by flood/landslide. Fresh snow is lying on the pass.',
-    timing: 'Normally 3 days Sama Gaun → Dharapani, then ~8–10 h jeep to Kathmandu',
+      'Manang district BANNED high-altitude trekking Fri–Sun, explicitly naming Bhimthang. The Chame–Besisahar road that the Tilije jeep uses is also completely blocked by flood/landslide. Fresh snow is lying on the pass.',
+    timing: 'Normally 3 days Sama Gaun → Tilije, then ~8–10 h jeep to Kathmandu',
     steps: [
       'Sama Gaun → Samdo (8.1 km, ~3–4 h)',
       'Samdo → Dharamsala / Larke Phedi (6.1 km, ~3–4 h)',
       'Dharamsala → Larke La 5,106 m → Bhimthang (15.6 km, 8–10 h) — the committing day',
-      'Bhimthang → Tilje → Dharapani (23.7 km, 7–8 h)',
-      'Dharapani → Besisahar → Kathmandu by jeep (road currently blocked)',
+      'Bhimthang → Tilije (18.1 km, 6–7 h) — the jeep road reaches Tilije, so this is the last walking day',
+      'Tilije → Dharapani → Besisahar → Kathmandu by jeep (road currently blocked)',
     ],
     pros: [
       'Completes the circuit as planned',
@@ -105,7 +105,7 @@ export const roadStatus: { road: string; status: RouteStatus; note: string }[] =
   {
     road: 'Chame – Besisahar (Manang ↔ Lamjung)',
     status: 'blocked',
-    note: 'COMPLETELY BLOCKED by flood/landslide. This is the road out from Dharapani — the far side of Larke La.',
+    note: 'COMPLETELY BLOCKED by flood/landslide. This is the road your jeep out of Tilije uses — the far side of Larke La.',
   },
   {
     road: 'Prithvi Highway (Kathmandu ↔ west / Mugling)',
