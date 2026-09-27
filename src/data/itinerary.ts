@@ -2,8 +2,8 @@
 // Source: the group's dated schedule, kept in step with what actually happened on
 // the trail: an extra night at Ghap, Ghap -> Lihi, a night at Shyala, then Sama Gaun
 // from 24 Sep with a weather hold while the late-September storm passes.
-// Days from 27 Sep are marked provisional: Larke La is closed to trekkers and the
-// road beyond Dharapani is blocked (see src/data/alerts.ts).
+// 27 Sep: helicopter rescue from Sama Gaun. The storm closed Larke La and cut the
+// roads out, so the circuit ended at Sama Gaun and the rest is Kathmandu.
 
 export type DayKind = 'fly' | 'city' | 'travel' | 'trek' | 'rest' | 'pass';
 
@@ -116,63 +116,57 @@ export const itinerary: ItineraryDay[] = [
     kind: 'rest',
   },
   {
-    id: 'd-t6',
+    id: 'd-heli',
     date: '2026-09-27',
-    icon: '🥾',
-    title: 'Sama Gaun → Samdo',
+    icon: '🚁',
+    title: 'Helicopter rescue — Sama Gaun → Kathmandu',
     detail:
-      'Gentle high-valley walk to Samdo (~3,860 m), the last permanent village. Only once the weather warning lifts.',
-    kind: 'trek',
-    provisional: true,
+      'Flown out of Sama Gaun after the storm closed the pass and cut the roads. The circuit ends here: no Larke La, no Bhimthang, no jeep from Tilije. Everyone out safe — that is the only part that counts.',
+    kind: 'fly',
   },
   {
-    id: 'd-t7',
+    id: 'd-ktm-1',
     date: '2026-09-28',
-    icon: '🥾',
-    title: 'Samdo → Dharamsala',
-    detail: 'Short climb to Dharamsala / Larke Phedi (~4,460 m). Rest early for the pass.',
-    kind: 'trek',
-    provisional: true,
-  },
-  {
-    id: 'd-pass',
-    date: '2026-09-29',
-    icon: '🏔️',
-    title: 'Dharamsala → Larkya La → Bhimthang',
+    icon: '🛁',
+    title: 'Kathmandu — recover',
     detail:
-      'THE BIG DAY. Pre-dawn start over Larkya La (5,106 m), then a long descent to Bhimthang (~3,720 m). 8–10 h. NOTE: trekking to Bhimthang was banned by the Manang administration during the storm and fresh snow is lying on the pass — confirm it has reopened before committing.',
-    kind: 'pass',
-    provisional: true,
-  },
-  {
-    id: 'd-t8',
-    date: '2026-09-30',
-    icon: '🥾',
-    title: 'Bhimthang → Tilije (last walking day)',
-    detail:
-      'Long descent through forest along the Dudh Khola via Karche and Gho to the Gurung village of Tilije (~2,300 m) — apple orchards and much thicker air.',
-    kind: 'trek',
-    provisional: true,
-  },
-  {
-    id: 'd-drive-out',
-    date: '2026-10-01',
-    icon: '🚙',
-    title: 'Tilije → Kathmandu (jeep)',
-    detail:
-      'The road reaches Tilije, so the jeep picks up here — no walk out to Dharapani. Long drive down via Dharapani and Besisahar to Kathmandu. NOTE: the Chame–Besisahar road was completely blocked by flood and landslide — check before relying on this.',
-    kind: 'travel',
-    provisional: true,
-  },
-  {
-    id: 'd-buffer',
-    date: '2026-10-02',
-    icon: '🏙️',
-    title: 'Kathmandu — buffer / repack',
-    detail:
-      'The buffer is down to a single day now. Rest, repack, sort the flight home. Any further delay on the trail eats into the 3 Oct departure.',
+      'Hot shower, laundry, and a proper bed. Sort the flight home (the DXB→TLV leg is cancelled — see the Alerts tab) and settle up with the agency and the helicopter operator.',
     kind: 'city',
-    provisional: true,
+  },
+  {
+    id: 'd-ktm-2',
+    date: '2026-09-29',
+    icon: '🏙️',
+    title: 'Kathmandu — Patan & Boudha',
+    detail:
+      'Patan Durbar Square and its museum are the best half-day in the valley; Boudhanath at dusk when the lamps come on. Both easy, both flat.',
+    kind: 'city',
+  },
+  {
+    id: 'd-ktm-3',
+    date: '2026-09-30',
+    icon: '🏙️',
+    title: 'Kathmandu — Bhaktapur',
+    detail:
+      'A full day in Bhaktapur if you want one more proper sight, or a slow day by the pool if you would rather not move. You have earned either.',
+    kind: 'city',
+  },
+  {
+    id: 'd-ktm-4',
+    date: '2026-10-01',
+    icon: '🛍️',
+    title: 'Kathmandu — Thamel & souvenirs',
+    detail:
+      'Thamel for gifts, pashmina, tea and prayer flags. Confirm the flight and the airport transfer.',
+    kind: 'city',
+  },
+  {
+    id: 'd-ktm-5',
+    date: '2026-10-02',
+    icon: '🎒',
+    title: 'Kathmandu — repack',
+    detail: 'Repack, last meal out, and an early night before the flight.',
+    kind: 'city',
   },
   {
     id: 'd-fly-home',
@@ -180,8 +174,7 @@ export const itinerary: ItineraryDay[] = [
     icon: '✈️',
     title: 'Fly home',
     detail:
-      'Departure from Kathmandu. The DXB→TLV leg was cancelled — see the Alerts tab for 4 Oct replacements and the rebooking email.',
+      'Departure from Kathmandu. The DXB→TLV leg was cancelled — the Alerts tab has 4 Oct replacements and the rebooking email.',
     kind: 'fly',
-    provisional: true,
   },
 ];

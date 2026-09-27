@@ -5,6 +5,7 @@ import { useFxRate } from '../hooks/useFxRate';
 import { CashTracker } from './CashTracker';
 import { budgetItems, GROUP_LABELS, type BudgetGroup } from '../data/budget';
 import { itinerary } from '../data/itinerary';
+import { ILS_PER_USD, KTM_HOTELS_AS_OF, KTM_HOTELS_STAY, ktmStays } from '../data/ktmStays';
 import {
   afterTrek,
   afterTrekIntro,
@@ -176,6 +177,35 @@ export function Plan() {
 
       {section === 'after' && (
         <>
+          <div className="section-title">Kathmandu hotels · live {new Date(KTM_HOTELS_AS_OF + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}</div>
+          <div className="small muted" style={{ margin: '0 2px 8px' }}>
+            {KTM_HOTELS_STAY}. Totals for the whole stay — re-check before booking.
+          </div>
+          {ktmStays.map((h) => (
+            <div key={h.id} className="card">
+              <div className="spread" style={{ marginBottom: 4 }}>
+                <span className="lvl lvl--ok">★ {h.score}</span>
+                <span className="small muted">{h.reviews} reviews</span>
+              </div>
+              <div className="card__title">{h.name}</div>
+              <div className="small muted" style={{ marginBottom: 6 }}>
+                {h.area} · {h.stars}★
+              </div>
+              <div className="spread" style={{ marginBottom: 6 }}>
+                <span className="small muted">6 nights, 2 people</span>
+                <b style={{ color: 'var(--gold)' }}>
+                  ₪{h.totalIls.toLocaleString()}{' '}
+                  <span className="small muted">≈ ${Math.round(h.totalIls / ILS_PER_USD)}</span>
+                </b>
+              </div>
+              <p className="small" style={{ marginTop: 0 }}>{h.why}</p>
+              <div className="small muted" style={{ marginBottom: 8 }}>{h.highlights.join(' · ')}</div>
+              <a className="btn btn--sm btn--primary" href={h.url} target="_blank" rel="noreferrer">
+                🛏️ Check availability
+              </a>
+            </div>
+          ))}
+
           <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 8 }}>After the trek</div>
           <div className="banner banner--info">{afterTrekIntro}</div>
           {afterTrek.map((idea) => (
